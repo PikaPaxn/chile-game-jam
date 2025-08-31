@@ -1,0 +1,11 @@
+- Have a root object with MinigameController script
+- Use time to determine the time limit (in seconds)
+- Make your minigame, call MinigameController.Won() once you solve it
+- Once done, make it a prefab
+- Drag the prefab to MinigamesCoordinator in the Playroom scene
+- Press "Start Game" button
+- ...
+- Profit
+
+The coordinator instances and deletes the prefab in the scene, so is not necessary for it to be spawned before hand
+Cualquier cosa me preguntan - Fran

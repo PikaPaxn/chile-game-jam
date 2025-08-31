@@ -1,0 +1,68 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MinigamesCoordinator : MonoBehaviour
+{
+    public MinigameController[] minigames;
+    public Slider timeLeftSlider;
+
+    MinigameController _currentMinigameType;
+    MinigameController _currentMinigame;
+    bool _minigameDone = false;
+
+    public GameObject wonGO;
+    public GameObject loseGO;
+
+    void Start() {
+        wonGO.SetActive(false);
+        loseGO.SetActive(false);
+    }
+
+    void Update() {
+        if (_currentMinigame != null && !_minigameDone) {
+            // Update time
+            var timeLeft = _currentMinigame.TimeLeft01();
+            timeLeftSlider.value = timeLeft;
+            
+            // Check if won
+            if (_currentMinigame.HasWon) {
+                wonGO.SetActive(true);
+                _minigameDone = true;
+            }
+
+            // Check if lose
+            if (timeLeft <= 0) {
+                Debug.Log($"Did you won? {_currentMinigame.HasWon}");
+
+                // Check if won
+                if (_currentMinigame.HasWon) {
+                    wonGO.SetActive(true);
+                } else {
+                    loseGO.SetActive(true);
+                }
+
+                _minigameDone = true;
+            }
+        }
+    }
+
+    public void StartMinigame() {
+        // Get random game
+        var minigame = minigames[Random.Range(0, minigames.Length)];
+
+        // If is not in the scene, instanciate it
+        if (_currentMinigameType != minigame || !_currentMinigame.IsInstanced) {
+            if (_currentMinigame != null) {
+                Destroy(_currentMinigame.gameObject);
+            }
+            _currentMinigameType = minigame;
+            _currentMinigame = Instantiate(minigame);
+        }
+
+        // Start a new minigame
+        _currentMinigame.StartGame();
+        _minigameDone = false;
+        wonGO.SetActive(false);
+        loseGO.SetActive(false);
+    }
+}
