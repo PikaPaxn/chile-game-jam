@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
-public class FloweryDesertGame : MonoBehaviour
+public class FloweryDesertGame : MinigameController
 {
     [Header("Config")]
     [SerializeField] private int targetClicks = 25;
@@ -46,15 +46,17 @@ public class FloweryDesertGame : MonoBehaviour
         StartGame();
     }
 
-    public void StartGame()
+    public override void StartGame()
     {
         _clicks = 0;
-        _remaining = Mathf.Max(0.1f, this.GetMinigameController().time-0.1f); //TODO: Fix this problem 0.1f
+        _remaining = Mathf.Max(0.1f, timeLimit-0.1f); //TODO: Fix this problem 0.1f
         _state = State.Playing;
 
         UpdateUI();
         SetRain(true);
         SetRainParticlesEmissionRate(0);
+        
+        base.StartGame();
     }
 
     void Update()

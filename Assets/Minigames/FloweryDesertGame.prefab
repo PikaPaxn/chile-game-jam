@@ -4479,7 +4479,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2750762656765984528}
-  - component: {fileID: 4140598835950003937}
   - component: {fileID: 8488488383028180969}
   m_Layer: 0
   m_Name: FloweryDesertGame
@@ -4504,19 +4503,6 @@ Transform:
   - {fileID: 2798821235056002560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4140598835950003937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6701825397364391533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5db142295b204145a81569778ad9144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 10
 --- !u!114 &8488488383028180969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4529,6 +4515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78902ad80313fb34a9012db67e21c92d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeLimit: 10
   targetClicks: 50
   counterText: {fileID: 5457225211395901583}
   timerText: {fileID: 0}
@@ -4540,8 +4527,8 @@ MonoBehaviour:
   onWin:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4140598835950003937}
-        m_TargetAssemblyTypeName: MinigameController, Assembly-CSharp
+      - m_Target: {fileID: 8488488383028180969}
+        m_TargetAssemblyTypeName: FloweryDesertGame, Assembly-CSharp
         m_MethodName: Won
         m_Mode: 1
         m_Arguments:
