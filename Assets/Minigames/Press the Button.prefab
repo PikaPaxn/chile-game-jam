@@ -508,7 +508,7 @@ GameObject:
   - component: {fileID: 2750762656765984528}
   - component: {fileID: 4140598835950003937}
   m_Layer: 0
-  m_Name: Minigame - Press the Button
+  m_Name: Press the Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
