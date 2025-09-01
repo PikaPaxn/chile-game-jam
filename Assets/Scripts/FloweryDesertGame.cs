@@ -14,6 +14,8 @@ public class FloweryDesertGame : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private ParticleSystem rainParticles;
+
+    [SerializeField] private GameObject flowersGroup;
     [SerializeField] private AudioSource sfxTap;
     [SerializeField] private AudioSource sfxWin;
     [SerializeField] private AudioSource sfxLose;
@@ -94,6 +96,8 @@ public class FloweryDesertGame : MonoBehaviour
         {
             if (sfxWin != null) sfxWin.Play();
             onWin?.Invoke();
+            
+            ActivateFlowers();
         }
         else
         {
@@ -154,5 +158,10 @@ public class FloweryDesertGame : MonoBehaviour
         }
 
         SetRainParticlesEmissionRate(Mathf.RoundToInt(rate));
+    }
+
+    private void ActivateFlowers(bool activate = true)
+    {
+        flowersGroup.SetActive(activate);
     }
 }
