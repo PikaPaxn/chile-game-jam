@@ -1,31 +1,40 @@
 using UnityEngine;
-using UnityEngine.UIElements;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class MinigameController : MonoBehaviour
 {
-    public float time;
+    [Header("General Minigame Config")]
+    [Tooltip("How long should the minigame be, in seconds")]
+    public float timeLimit;
+
+    // State of the game
+    protected enum State { Idle, Playing, End }
+    protected State _currentState = State.Idle;
+
+    // Manage if the game has ended
     float _startTime;
     bool _hasWon;
 
-
-    public void StartGame() {
+    /// <summary>
+    /// When overriding remember to call base.StartGame() to preserve the time logic
+    /// </summary>
+    public virtual void StartGame() {
         _hasWon = false;
         _startTime = Time.time;
+        _currentState = State.Playing;
     }
 
+    /// <summary>
+    /// Call it so the coordinator knows you won the minigame
+    /// </summary>
     public void Won() {
         Debug.Log("You won the Minigame!", gameObject);
         _hasWon = true;
+        _currentState = State.End;
     }
 
+    // Coordinator references
     public bool HasWon => _hasWon;
-
     public bool IsInstanced => gameObject.scene.name != null;
-
 
     /// <summary>
     /// Returns how much time is left
@@ -33,15 +42,6 @@ public class MinigameController : MonoBehaviour
     /// <returns>1 is all time is left, 0 is time has expired</returns>
     public float TimeLeft01() {
         float timePassed = Time.time - _startTime;
-        return 1f - Mathf.InverseLerp(0, time, timePassed);
+        return 1f - Mathf.InverseLerp(0, timeLimit, timePassed);
     }
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(MinigameController))]
-public class MinigameControllerEditor : Editor {
-    public override VisualElement CreateInspectorGUI() {
-        return base.CreateInspectorGUI();
-    }
-}
-#endif
