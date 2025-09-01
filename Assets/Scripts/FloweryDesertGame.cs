@@ -6,13 +6,11 @@ using UnityEngine.Events;
 public class FloweryDesertGame : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private float durationSeconds = 4f;
     [SerializeField] private int targetClicks = 25;
 
     [Header("UI")]
     [SerializeField] private TMP_Text counterText;
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private Image progressFill; // opcional
 
     [Header("Feedback")]
     [SerializeField] private ParticleSystem rainParticles;
@@ -41,7 +39,7 @@ public class FloweryDesertGame : MonoBehaviour
     public void StartGame()
     {
         clicks = 0;
-        remaining = Mathf.Max(0.1f, durationSeconds);
+        remaining = Mathf.Max(0.1f, this.GetMinigameController().time-0.1f); //TODO: Fix this problem 0.1f
         state = State.Playing;
 
         UpdateUI();
@@ -69,12 +67,12 @@ public class FloweryDesertGame : MonoBehaviour
         UpdateUI();
     }
 
-    private void FinishGame(bool earlyWin = false)
+    private void FinishGame()
     {
         if (state == State.Ended) return;
         state = State.Ended;
 
-        bool win = earlyWin || clicks >= targetClicks;
+        bool win = clicks >= targetClicks;
 
         SetRain(win);
 
@@ -88,6 +86,7 @@ public class FloweryDesertGame : MonoBehaviour
             if (sfxLose != null) sfxLose.Play();
             onLose?.Invoke();
         }
+
     }
 
     private void UpdateUI()
@@ -97,12 +96,7 @@ public class FloweryDesertGame : MonoBehaviour
 
         if (timerText != null)
             timerText.text = $"Tiempo: {remaining:0.0}s";
-
-        if (progressFill != null)
-        {
-            float p = targetClicks <= 0 ? 1f : (float)clicks / targetClicks;
-            progressFill.fillAmount = Mathf.Clamp01(p);
-        }
+        
     }
 
     private void SetRain(bool on)
