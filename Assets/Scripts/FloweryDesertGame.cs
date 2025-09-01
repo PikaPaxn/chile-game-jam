@@ -23,14 +23,22 @@ public class FloweryDesertGame : MonoBehaviour
     public UnityEvent onLose;
     
     [Header("DevFeedback")]
-    [SerializeField] private float remaining;
-    [SerializeField] private int clicks;
+    [SerializeField] private float _remaining;
+    [SerializeField] private int _clicks;
 
     private enum State { Idle, Playing, Ended }
-    private State state = State.Idle;
+    private State _state = State.Idle;
 
     
+    [Header("Rain configuration")]
+    // Exponente de la curva (2 = cuadrática clásica). 
+    // Sube a 2.5–3 para que “cueste más” al inicio.
+    [SerializeField, Range(1f, 4f)] private float power = 2f;
 
+    // Si quieres mantener 5 niveles discretos, activa esto.
+    [SerializeField] private bool quantizeTo5Levels = false;
+    [SerializeField] private int maxRainParticles = 100;
+    
     void OnEnable()
     {
         StartGame();
@@ -38,41 +46,47 @@ public class FloweryDesertGame : MonoBehaviour
 
     public void StartGame()
     {
-        clicks = 0;
-        remaining = Mathf.Max(0.1f, this.GetMinigameController().time-0.1f); //TODO: Fix this problem 0.1f
-        state = State.Playing;
+        _clicks = 0;
+        _remaining = Mathf.Max(0.1f, this.GetMinigameController().time-0.1f); //TODO: Fix this problem 0.1f
+        _state = State.Playing;
 
         UpdateUI();
-        SetRain(false);
+        SetRain(true);
+        SetRainParticlesEmissionRate(0);
     }
 
     void Update()
     {
-        if (state != State.Playing) return;
+        if (_state != State.Playing) return;
 
         if (Input.GetButtonDown("Fire1"))
         {
-            clicks++;
+            _clicks++;
             if (sfxTap != null) sfxTap.Play();
             
-        }
+            UpdateRainIntensity();
 
-        remaining -= Time.deltaTime;
-        if (remaining <= 0f)
+        }
+        
+        
+        _remaining -= Time.deltaTime;
+        if (_remaining <= 0f)
         {
-            remaining = 0f;
+            _remaining = 0f;
             FinishGame();
         }
 
         UpdateUI();
+        
+        
     }
 
     private void FinishGame()
     {
-        if (state == State.Ended) return;
-        state = State.Ended;
+        if (_state == State.Ended) return;
+        _state = State.Ended;
 
-        bool win = clicks >= targetClicks;
+        bool win = _clicks >= targetClicks;
 
         SetRain(win);
 
@@ -92,10 +106,10 @@ public class FloweryDesertGame : MonoBehaviour
     private void UpdateUI()
     {
         if (counterText != null)
-            counterText.text = $"Clicks: {clicks} / {targetClicks}";
+            counterText.text = $"Clicks: {_clicks} / {targetClicks}";
 
         if (timerText != null)
-            timerText.text = $"Tiempo: {remaining:0.0}s";
+            timerText.text = $"Tiempo: {_remaining:0.0}s";
         
     }
 
@@ -104,5 +118,41 @@ public class FloweryDesertGame : MonoBehaviour
         if (rainParticles == null) return;
         if (on && !rainParticles.isPlaying) rainParticles.Play();
         else if (!on && rainParticles.isPlaying) rainParticles.Stop();
+    }
+
+    private void SetRainParticlesEmissionRate(int rate)
+    {
+        if (rainParticles == null) return;
+        var rainParticlesEmission = rainParticles.emission;
+        rainParticlesEmission.rateOverTime = rate;
+    }
+    
+
+    private void UpdateRainIntensity()
+    {
+        if (rainParticles == null) return;
+
+        // Progreso real según clicks
+        float progress = (targetClicks > 0) ? (float)_clicks / targetClicks : 1f;
+        progress = Mathf.Clamp01(progress);
+
+        // Curva cuadrática (ease-in): p^power
+        float curve = Mathf.Pow(progress, power);  // p^2 si power=2
+
+        float rate;
+        if (quantizeTo5Levels)
+        {
+            // Mantiene 5 niveles, pero posicionados según la curva cuadrática
+            // curve está en 0..1; lo llevamos a 0..5 y redondeamos
+            int level = Mathf.Clamp(Mathf.RoundToInt(curve * 5f), 0, 5);
+            rate = (maxRainParticles / 5f) * level;
+        }
+        else
+        {
+            // Cuadrática continua
+            rate = curve * maxRainParticles;
+        }
+
+        SetRainParticlesEmissionRate(Mathf.RoundToInt(rate));
     }
 }
