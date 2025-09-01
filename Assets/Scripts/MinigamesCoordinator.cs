@@ -3,13 +3,14 @@ using UnityEngine.UI;
 
 public class MinigamesCoordinator : MonoBehaviour
 {
+    [Header("Minigames List")]
     public MinigameController[] minigames;
-    public Slider timeLeftSlider;
-
     MinigameController _currentMinigameType;
     MinigameController _currentMinigame;
     bool _minigameDone = false;
 
+    [Header("UI Refs")]
+    public Slider timeLeftSlider;
     public GameObject wonGO;
     public GameObject loseGO;
 
