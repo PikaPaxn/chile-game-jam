@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigames:
-  - {fileID: 4140598835950003937, guid: 0fb5fcffeef44c04c9fe3ded769d12d6, type: 3}
+  - {fileID: 8488488383028180969, guid: 0fb5fcffeef44c04c9fe3ded769d12d6, type: 3}
   timeLeftSlider: {fileID: 246923806}
   wonGO: {fileID: 75424972}
   loseGO: {fileID: 864402264}
