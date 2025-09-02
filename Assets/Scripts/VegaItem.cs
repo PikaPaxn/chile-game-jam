@@ -4,15 +4,21 @@ using UnityEngine.EventSystems;
 public class VegaItem : DragAndDrop
 {
     Sprite _myIcon;
-    
-    public void Initialize(Sprite icon) {
+    ItemCallbacks _callbacks;
+
+    public void Initialize(Sprite icon, ItemCallbacks callbacks = null) {
         _myIcon = icon;
         GetComponent<SpriteRenderer>().sprite = icon;
+        _callbacks = callbacks;
+
+        if (GetComponent<BoxCollider2D>() != null)
+            Destroy(GetComponent<BoxCollider2D>());
+        gameObject.AddComponent<BoxCollider2D>();
     }
 
     public override bool ShouldStay() {
         var hit = Physics2D.OverlapPointAll(transform.position);
-        Debug.Log($"Kyaaaa... I got dropped at {transform.position} and hit {hit}");
+        //Debug.Log($"Kyaaaa... I got dropped at {transform.position} and hit {hit}");
 
         // We hit nothing, ignore
         if (hit.Length < 2) {
@@ -25,8 +31,21 @@ public class VegaItem : DragAndDrop
             return false;
         }
 
+        // Check if right
         var success = box.CheckIcon(_myIcon);
-        Debug.Log($"I got hit! Was it right? {success}");
+        if (success) {
+            gameObject.SetActive(false);
+            transform.SetAsLastSibling();
+            _callbacks?.onCorrectBox.Invoke();
+        } else {
+            _callbacks?.onWrongBox.Invoke();
+        }
+
         return true;
+    }
+
+    public class ItemCallbacks {
+        public System.Action onCorrectBox;
+        public System.Action onWrongBox;
     }
 }

@@ -31,6 +31,7 @@ public static class RandomUtil {
     /// <param name="array">Array with elements</param>
     /// <returns>Random element of the array</returns>
     public static T RandomPick<T>(this T[] array) => array[Random.Range(0, array.Length)];
+    public static T RandomPick<T>(this List<T> array) => array[Random.Range(0, array.Count)];
     /// <summary>
     /// Get a Random element of an array without repetition
     /// </summary>
@@ -47,6 +48,18 @@ public static class RandomUtil {
         int idx = last;
         while (idx == last) {
             idx = Random.Range(0, array.Length);
+        }
+        return (array[idx], idx);
+    }
+    public static (T, int) RandomPick<T>(this List<T> array, int last) {
+        if (array.Count < 2) {
+            Debug.LogWarning("List is size 1, can't pick a different element");
+            return (array[0], 0);
+        }
+
+        int idx = last;
+        while (idx == last) {
+            idx = Random.Range(0, array.Count);
         }
         return (array[idx], idx);
     }
