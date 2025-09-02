@@ -32,7 +32,7 @@ public class MinigamesCoordinator : MonoBehaviour
             }
 
             // Check if lose
-            if (timeLeft <= 0) {
+            if (timeLeft <= 0 || !_currentMinigame.IsPlaying) {
                 Debug.Log($"Did you won? {_currentMinigame.HasWon}");
 
                 // Check if won
