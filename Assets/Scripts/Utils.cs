@@ -17,20 +17,20 @@ public static class RandomUtil {
     /// </summary>
     /// <param name="limits">Vector with the min and max values</param>
     /// <returns>A random float between min (inclusive) and max (inclusive)</returns>
-    public static float Range(Vector2 limits) => Random.Range(limits.x, limits.y);
+    public static float Range(this Vector2 limits) => Random.Range(limits.x, limits.y);
     /// <summary>
     /// Get a random number between the components of a <c>Vector2</c>
     /// </summary>
     /// <param name="limits">Vector with the min and max values</param>
     /// <returns>A random int between min (inclusive) and max (exclusive)</returns>
-    public static int Range(Vector2Int limits) => Random.Range(limits.x, limits.y);
+    public static int Range(this Vector2Int limits) => Random.Range(limits.x, limits.y);
     /// <summary>
     /// Get a Random element of an array
     /// </summary>
     /// <typeparam name="T">Element Type</typeparam>
     /// <param name="array">Array with elements</param>
     /// <returns>Random element of the array</returns>
-    public static T RandomPick<T>(T[] array) => array[Random.Range(0, array.Length)];
+    public static T RandomPick<T>(this T[] array) => array[Random.Range(0, array.Length)];
     /// <summary>
     /// Get a Random element of an array without repetition
     /// </summary>
@@ -38,7 +38,7 @@ public static class RandomUtil {
     /// <param name="array">Array with elements</param>
     /// <param name="last">Index of the last element picked</param>
     /// <returns>A tuple with a random element of the array and its index</returns>
-    public static (T, int) RandomPick<T>(T[] array, int last) {
+    public static (T, int) RandomPick<T>(this T[] array, int last) {
         if (array.Length < 2) {
             Debug.LogWarning("Array is size 1, can't pick a different element");
             return (array[0], 0);
@@ -51,11 +51,35 @@ public static class RandomUtil {
         return (array[idx], idx);
     }
     /// <summary>
+    /// Gets a Random element of an array without repetition
+    /// </summary>
+    /// <typeparam name="T">Element Type</typeparam>
+    /// <param name="array">Array with elements</param>
+    /// <param name="picked">Array with already picked elements</param>
+    /// <returns>Random element not on picked array</returns>
+    public static T RandomPick<T>(this T[] array, T[] picked) {
+        if (array.Length < 2) {
+            Debug.LogWarning("Array is size 1, can't pick a different element");
+            return array[0];
+        }
+
+        if (array.Length <= picked.Length) {
+            Debug.LogWarning("Array isn't bigger than picked array, all elements must already been seen. Aborting...");
+            return array[0];
+        }
+
+        T element;
+        do {
+            element = array.RandomPick();
+        } while (System.Array.IndexOf(picked, element) > -1);
+        return element;
+    }
+    /// <summary>
     /// Get a Random 2D Point of a determined bound
     /// </summary>
     /// <param name="zone">Bounds of the area</param>
     /// <returns>Vector2 with a random point inside the area</returns>
-    public static Vector2 RandomPoint(Rect zone) {
+    public static Vector2 RandomPoint(this Rect zone) {
         var x = Random.Range(zone.xMin, zone.xMax);
         var y = Random.Range(zone.yMin, zone.yMax);
         return new Vector2(x, y);
