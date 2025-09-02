@@ -8,13 +8,13 @@ using TMPro;
 public class KiteWarGame : MinigameController
 {
     [Header("Rondas (cantidad de flechas por ronda, en orden)")]
-    [SerializeField] private int[] roundLengths = new int[] { 1, 3, 5 };
+    [SerializeField] private int[] roundLengths = { 1, 3, 5 };
 
-    [Header("Tiempo por input (segundos)")]
-    [Tooltip("Ventana base para presionar cada flecha. Se reduce por ronda con roundTimeMultiplier.")]
-    [SerializeField, Range(0.15f, 2f)] private float perKeyTime = 0.7f;
+    [Header("Tiempo por RONDA (segundos)")]
+    [Tooltip("Ventana base para completar TODA la secuencia de la ronda.")]
+    [SerializeField, Range(0.5f, 10f)] private float perRoundTime = 3.0f;
 
-    [Tooltip("Multiplicador por ronda. Ej: 0.9f = cada ronda 10% menos de tiempo.")]
+    [Tooltip("Multiplicador por ronda. Ej: 0.9f = cada ronda 10% menos de tiempo total.")]
     [SerializeField, Range(0.6f, 1.0f)] private float roundTimeMultiplier = 0.9f;
 
     [Tooltip("Pausa corta entre rondas (segundos)")]
@@ -23,52 +23,54 @@ public class KiteWarGame : MinigameController
     [Header("UI")]
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text roundText;
-
+    
+    [Header("Round Progress UI")]
+    [SerializeField] private Slider roundProgress;
+    [SerializeField] private bool flashOnHurry = true;
+    [SerializeField, Range(0f, 0.9f)] private float hurryThreshold = 0.2f;
+    [SerializeField] private Animator roundBarAnim;  // animador opcional para parpadeo
+    
+    [Header("Round Progress Sliders Colors")]
+    [SerializeField] private Image roundProgressFill;
+    [SerializeField] private Color sliderColorFilled  = new(0.20f, 0.80f, 0.20f);
+    [SerializeField] private Color sliderColorHalf = new(1.00f, 0.85f, 0.20f);
+    [SerializeField] private Color liderColorEmpty    = new(0.95f, 0.25f, 0.20f);
+    
     [Tooltip("Contenedor donde se dibuja la secuencia de flechas")]
     [SerializeField] private Transform sequenceContainer;
-
+    
     [Tooltip("Prefab de un ítem de flecha (Image). El script pintará su sprite y color.")]
     [SerializeField] private GameObject arrowItemPrefab;
 
     [Header("Sprites flechas")]
-    [SerializeField] private Sprite spriteUp;
-    [SerializeField] private Sprite spriteDown;
-    [SerializeField] private Sprite spriteLeft;
-    [SerializeField] private Sprite spriteRight;
+    [SerializeField] private Sprite spriteUp, spriteDown, spriteLeft, spriteRight;
 
     [Header("Colores UI")]
     [SerializeField] private Color nextColor = Color.white;
-    [SerializeField] private Color hitColor = new Color(0.3f, 1f, 0.3f);
-    [SerializeField] private Color failColor = new Color(1f, 0.3f, 0.3f);
-    [SerializeField] private Color idleColor = new Color(1f, 1f, 1f, 0.4f);
+    [SerializeField] private Color hitColor  = new(0.3f, 1f, 0.3f);
+    [SerializeField] private Color failColor = new(1f, 0.3f, 0.3f);
+    [SerializeField] private Color idleColor = new(1f, 1f, 1f, 0.4f);
 
     [Header("Feedback / Audio")]
-    [SerializeField] private AudioSource sfxOk;
-    [SerializeField] private AudioSource sfxWrong;
-    [SerializeField] private AudioSource sfxRound;
-    [SerializeField] private AudioSource sfxWin;
-    [SerializeField] private AudioSource sfxLose;
+    [SerializeField] private AudioSource sfxOk, sfxWrong, sfxRound, sfxWin, sfxLose;
 
     [Header("Animators (opcional)")]
-    [SerializeField] private Animator playerKiteAnim;
-    [SerializeField] private Animator enemyKiteAnim;
+    [SerializeField] private Animator playerKiteAnim, enemyKiteAnim;
 
     [Header("Eventos")]
-    public UnityEvent onPlayerHit;
-    public UnityEvent onEnemyHit;
-    public UnityEvent onPlayerWin;
-    public UnityEvent onEnemyWin;
-    
+    public UnityEvent onPlayerHit, onEnemyHit, onPlayerWin, onEnemyWin;
+
     private enum Direction { Up, Down, Left, Right }
 
     private readonly List<Direction> _currentSequence = new();
     private readonly List<Image> _uiArrows = new();
 
-    private int _roundIndex;     // ronda actual
-    private int _seqIndex;       // índice dentro de la secuencia
-    private float _keyDeadline;  // tiempo límite para la tecla actual
-    private bool _waitingNextRound;
+    private int _roundIndex;        // ronda actual
+    private int _seqIndex;          // índice dentro de la secuencia
+    private bool _waitingNextRound; // en delay entre rondas
+    private float _roundDeadline;
     
+    private float _roundDuration;   // ← tiempo límite de la ronda
 
     private void OnEnable()
     {
@@ -82,7 +84,7 @@ public class KiteWarGame : MinigameController
 
         ClearSequenceUI();
         UpdateRoundText();
-        UpdateTimerUI();
+        UpdateTimerUI(0f);
 
         base.StartGame();
 
@@ -93,7 +95,6 @@ public class KiteWarGame : MinigameController
     {
         if (_currentState != State.Playing) return;
 
-        UpdateTimerUI();
         if (TimeLeft01() <= 0f) 
         {
             Lose();
@@ -102,9 +103,13 @@ public class KiteWarGame : MinigameController
 
         if (_waitingNextRound) return;
 
-        if (Time.time > _keyDeadline)
+        float roundTimeLeft = Mathf.Max(0f, _roundDeadline - Time.time);
+        UpdateRoundUI(roundTimeLeft);
+        UpdateTimerUI(roundTimeLeft);
+
+        if (roundTimeLeft <= 0f)
         {
-            FailInput();
+            FailInput(); // Se acabó el tiempo de la ronda sin completar la secuencia
             return;
         }
 
@@ -126,7 +131,6 @@ public class KiteWarGame : MinigameController
             else
             {
                 MarkUI(_seqIndex, nextColor);
-                _keyDeadline = Time.time + CurrentPerKeyTime();
             }
         }
         else
@@ -134,25 +138,31 @@ public class KiteWarGame : MinigameController
             FailInput();
         }
     }
-
-
+    
     private void StartRound()
     {
         _waitingNextRound = false;
 
         ClearSequenceUI();
 
-        int length = Mathf.Clamp(roundLengths[Mathf.Clamp(_roundIndex, 0, roundLengths.Length - 1)], 1, 10);
+        int length = Mathf.Clamp(roundLengths[Mathf.Clamp(_roundIndex, 0, roundLengths.Length - 1)], 1, 20);
         GenerateSequence(length);
-
         BuildSequenceUI();
 
         _seqIndex = 0;
         if (_uiArrows.Count > 0) MarkUI(0, nextColor);
 
-        _keyDeadline = Time.time + CurrentPerKeyTime();
+        _roundDuration = CurrentRoundTime();
+        _roundDeadline = Time.time + CurrentRoundTime();
 
         if (sfxRound) sfxRound.Play();
+        
+        UpdateRoundText();
+        UpdateRoundProgressUI(1f);
+        UpdateTimerUI(_roundDeadline - Time.time);
+
+        if (roundProgressFill != null)
+            roundProgressFill.color = sliderColorFilled;
     }
 
     private void RoundSuccess()
@@ -170,18 +180,19 @@ public class KiteWarGame : MinigameController
             return;
         }
 
-        // Preparar siguiente ronda con un pequeño delay
         StartCoroutine(NextRoundAfterDelay());
     }
 
     private IEnumerator NextRoundAfterDelay()
     {
         _waitingNextRound = true;
+        // UpdateRoundProgressUI(0f);
+        // UpdateTimerUI(0f); // pausa entre rondas
         yield return new WaitForSeconds(betweenRoundsDelay);
-
         UpdateRoundText();
         StartRound();
     }
+
 
     private void FailInput()
     {
@@ -197,12 +208,15 @@ public class KiteWarGame : MinigameController
     private void Lose()
     {
         if (_currentState == State.End) return;
+        
+        // UpdateRoundProgressUI(0f);
+        if (roundBarAnim) roundBarAnim.SetBool("hurry", false);
 
         if (enemyKiteAnim) enemyKiteAnim.SetTrigger("cut_player");
         if (sfxLose) sfxLose.Play();
         onEnemyWin?.Invoke();
 
-        _currentState = State.End; // cerrar loop
+        _currentState = State.End;
     }
 
 
@@ -212,30 +226,29 @@ public class KiteWarGame : MinigameController
         if (Input.GetButtonDown("DirectionDown")) return Direction.Down;
         if (Input.GetButtonDown("DirectionLeft")) return Direction.Left;
         if (Input.GetButtonDown("DirectionRight")) return Direction.Right;
-
         return null;
     }
 
-    private float CurrentPerKeyTime()
+    private float CurrentRoundTime()
     {
+        // reduce el tiempo total permitido por ronda
         float factor = Mathf.Pow(roundTimeMultiplier, _roundIndex);
-        return Mathf.Max(0.12f, perKeyTime * factor);
+        return Mathf.Max(0.25f, perRoundTime * factor);
     }
 
     private void GenerateSequence(int length)
     {
         _currentSequence.Clear();
-        
+
         Direction? last = null;
         int sameCount = 0;
-
         for (int i = 0; i < length; i++)
         {
             Direction direction = (Direction)Random.Range(0, 4);
             if (last.HasValue && direction == last.Value)
             {
                 sameCount++;
-                if (sameCount >= 1) // evita repetición
+                if (sameCount >= 1) // evita 2 iguales seguidas
                 {
                     direction = (Direction)(((int)direction + Random.Range(1, 4)) % 4);
                     sameCount = 0;
@@ -284,18 +297,62 @@ public class KiteWarGame : MinigameController
             _ => spriteUp
         };
     }
-    
-    private void UpdateTimerUI()
+    private void UpdateTimerUI(float roundSecondsLeft)
     {
         if (!timerText) return;
-        float totalLeft = TimeLeft01();                // 0..1
-        float secondsLeft = Mathf.Max(0f, timeLimit * totalLeft);
-        timerText.text = $"Tiempo: {secondsLeft:0.0}s";
+
+        if (roundSecondsLeft > 0f)
+            timerText.text = $"Tiempo ronda: {roundSecondsLeft:0.0}s";
+        else
+        {
+            float totalLeft01 = TimeLeft01();
+            float secondsLeft = Mathf.Max(0f, timeLimit * totalLeft01);
+            timerText.text = $"Tiempo: {secondsLeft:0.0}s";
+        }
     }
 
     private void UpdateRoundText()
     {
         if (!roundText) return;
         roundText.text = $"Ronda: {_roundIndex + 1}/{roundLengths.Length}";
+    }
+    
+    private void UpdateRoundUI(float roundTimeLeft)
+    {
+        UpdateTimerUI(roundTimeLeft);
+        if (_roundDuration > 0f)
+        {
+            float t01 = roundTimeLeft / _roundDuration;      // 1 → 0
+            UpdateRoundProgressUI(t01);
+        }
+    }
+    
+    private void UpdateRoundProgressUI(float t01)
+    {
+        t01 = Mathf.Clamp01(t01);
+
+        if (roundProgress != null)
+            roundProgress.value = t01;
+        
+        if (roundProgressFill != null)
+        {
+            Color c;
+            if (t01 >= 0.5f)
+            {
+                // 1..0.5 => sliderColorFilled -> sliferColorHalf
+                float k = Mathf.InverseLerp(0.5f, 1f, t01);   // k=1 en 1.0, k=0 en 0.5
+                c = Color.Lerp(sliderColorHalf, sliderColorFilled, k);
+            }
+            else
+            {
+                // 0.5..0 => sliferColorHalf -> sliderColorEmpty
+                float k = Mathf.InverseLerp(0f, 0.5f, t01);   // k=1 en 0.5, k=0 en 0
+                c = Color.Lerp(liderColorEmpty, sliderColorHalf, k);
+            }
+            roundProgressFill.color = c;
+        }
+
+        if (roundBarAnim != null && flashOnHurry)
+            roundBarAnim.SetBool("hurry", t01 <= hurryThreshold);
     }
 }
