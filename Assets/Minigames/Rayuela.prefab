@@ -617,7 +617,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9216679779062569117}
-  - component: {fileID: 5810853249086601}
+  - component: {fileID: 587208181438685960}
   m_Layer: 0
   m_Name: Rayuela
   m_TagString: Untagged
@@ -641,7 +641,7 @@ Transform:
   - {fileID: 84155076854817416}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5810853249086601
+--- !u!114 &587208181438685960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -650,10 +650,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 6467963732534839260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5db142295b204145a81569778ad9144, type: 3}
+  m_Script: {fileID: 11500000, guid: f83b2bfbfe504f94fa6c04b3d6c36e70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: 0
+  timeLimit: -1
+  forceSlider: {fileID: 8212523443507816556}
+  arena: {fileID: 1679594462532930729}
+  arenaTarget: {fileID: 8728427669528160281}
+  sliderTarget: {fileID: 2431532634016217759}
+  rayuela: {fileID: 481107406341263149}
+  forceSpeed: 0.5
+  forceContraints: {x: 0.1, y: 1}
+  forceMargin: 0.2
+  rayuelaTimeToFlight: 2
+  rayuelaFlight:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7022616070581944380
 GameObject:
   m_ObjectHideFlags: 0
