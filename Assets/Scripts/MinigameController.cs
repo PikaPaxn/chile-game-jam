@@ -32,9 +32,21 @@ public class MinigameController : MonoBehaviour
         _currentState = State.End;
     }
 
+    /// <summary>
+    /// Call it if you can lose the minigame other than by time
+    /// </summary>
+    public void Lose() {
+        Debug.Log("You lost the Minigame! :(", gameObject);
+        _hasWon = false;
+        _currentState = State.End;
+    }
+
+    public bool IsPlaying => _currentState == State.Playing;
+
     // Coordinator references
     public bool HasWon => _hasWon;
     public bool IsInstanced => gameObject.scene.name != null;
+    public bool UseTime => timeLimit > 0;
 
     /// <summary>
     /// Returns how much time is left
