@@ -302,12 +302,12 @@ public class KiteWarGame : MinigameController
         if (!timerText) return;
 
         if (roundSecondsLeft > 0f)
-            timerText.text = $"Tiempo ronda: {roundSecondsLeft:0.0}s";
+            timerText.text = $"{roundSecondsLeft:0.0}s";
         else
         {
             float totalLeft01 = TimeLeft01();
             float secondsLeft = Mathf.Max(0f, timeLimit * totalLeft01);
-            timerText.text = $"Tiempo: {secondsLeft:0.0}s";
+            timerText.text = $"{secondsLeft:0.0}s";
         }
     }
 

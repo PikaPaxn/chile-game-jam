@@ -160,8 +160,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 68.772, y: 35.807}
-  m_SizeDelta: {x: 22.456, y: 18.385}
+  m_AnchoredPosition: {x: 61.244007, y: 0}
+  m_SizeDelta: {x: 10.288, y: 8.423}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8348437187864048000
 CanvasRenderer:
@@ -218,8 +218,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -432,7 +432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 46.1, y: 9.8}
+  m_AnchoredPosition: {x: 37, y: 9.6}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9039177402328465351
@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532a44d7a126d24429fe288381ec9ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: 25
+  timeLimit: -1
   roundLengths: 010000000300000005000000
   perRoundTime: 3
   roundTimeMultiplier: 0.9
@@ -891,9 +891,9 @@ MonoBehaviour:
   hurryThreshold: 0.5
   roundBarAnim: {fileID: 0}
   roundProgressFill: {fileID: 1062135924456843005}
-  progressGreen: {r: 0.2, g: 0.8, b: 0.2, a: 1}
-  progressYellow: {r: 1, g: 0.85, b: 0.2, a: 1}
-  progressRed: {r: 0.95, g: 0.25, b: 0.2, a: 1}
+  sliderColorFilled: {r: 0.2, g: 0.8, b: 0.2, a: 1}
+  sliderColorHalf: {r: 1, g: 0.85, b: 0.2, a: 1}
+  liderColorEmpty: {r: 0.95, g: 0.25, b: 0.2, a: 1}
   sequenceContainer: {fileID: 692280002375396814}
   arrowItemPrefab: {fileID: 1170442657765237351, guid: 08f18f0d5991e5144837ee8100136b24, type: 3}
   spriteUp: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
