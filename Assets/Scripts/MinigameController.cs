@@ -46,6 +46,7 @@ public class MinigameController : MonoBehaviour
     // Coordinator references
     public bool HasWon => _hasWon;
     public bool IsInstanced => gameObject.scene.name != null;
+    public bool UseTime => timeLimit > 0;
 
     /// <summary>
     /// Returns how much time is left
