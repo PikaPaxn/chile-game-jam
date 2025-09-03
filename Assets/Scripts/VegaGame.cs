@@ -4,8 +4,8 @@ using UnityEngine;
 public class VegaGame : MinigameController {
     [Header("Object References")]
     public VegaBox[] boxes;
-    public Sprite[] icons;
-    List<Sprite> _chosenIcons;
+    public VegaSprites[] icons;
+    List<VegaSprites> _chosenIcons;
 
     public GameObject itemPrefab;
     public Transform itemsParent;
@@ -13,7 +13,7 @@ public class VegaGame : MinigameController {
     [Header("Items config")]
     public int itemsToSort = 5;
     int _correctItems;
-    List<Sprite> _currentList;
+    List<VegaSprites> _currentList;
     [SerializeField] float distanceBetweenItems;
     [SerializeField] float currentItemScale = 1.2f;
     [SerializeField] float inactiveItemScale = 0.8f;
@@ -25,6 +25,8 @@ public class VegaGame : MinigameController {
         _chosenIcons = new();
         _currentList = new();
         _correctItems = 0;
+        
+        // Initialize everything
         InitializeBoxes();
         InitializeQueue();
     }
@@ -86,4 +88,10 @@ public class VegaGame : MinigameController {
     void ItemOnWrongBox() {
         Lose();
     }
+}
+
+[System.Serializable]
+public class VegaSprites {
+    public Sprite box;
+    public Sprite fruit;
 }
