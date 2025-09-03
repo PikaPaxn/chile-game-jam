@@ -87,7 +87,7 @@ public class BalanceMeter : MonoBehaviour
         _pos = Mathf.Clamp(_pos + _vel * dt, -1f, 1f);
 
         // 4) ¿Está dentro de la zona segura?
-        float halfSafe = safeZoneWidth01 * 0.5f;
+        float halfSafe = Mathf.Clamp01(safeZoneWidth01);
         IsInsideSafe = Mathf.Abs(_pos) <= halfSafe;
 
         if (IsInsideSafe) _outsideTimer = 0f;
