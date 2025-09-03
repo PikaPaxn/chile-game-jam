@@ -22,8 +22,12 @@ public class MinigamesCoordinator : MonoBehaviour
     void Update() {
         if (_currentMinigame != null && !_minigameDone) {
             // Update time
-            var timeLeft = _currentMinigame.TimeLeft01();
-            timeLeftSlider.value = timeLeft;
+            bool timeDone = false;
+            if (_currentMinigame.UseTime) {
+                var timeLeft = _currentMinigame.TimeLeft01();
+                timeLeftSlider.value = timeLeft;
+                timeDone = timeLeft <= 0;
+            }
             
             // Check if won
             if (_currentMinigame.HasWon) {
@@ -32,7 +36,7 @@ public class MinigamesCoordinator : MonoBehaviour
             }
 
             // Check if lose
-            if (timeLeft <= 0 || !_currentMinigame.IsPlaying) {
+            if (!_currentMinigame.IsPlaying || timeDone) {
                 Debug.Log($"Did you won? {_currentMinigame.HasWon}");
 
                 // Check if won
