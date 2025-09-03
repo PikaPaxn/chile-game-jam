@@ -97,7 +97,7 @@ public class KiteWarGame : MinigameController
 
         if (TimeLeft01() <= 0f) 
         {
-            Lose();
+            LocalLose();
             return;
         }
 
@@ -202,10 +202,10 @@ public class KiteWarGame : MinigameController
         if (sfxWrong) sfxWrong.Play();
         onEnemyHit?.Invoke();
 
-        Lose();
+        LocalLose();
     }
 
-    private void Lose()
+    private void LocalLose()
     {
         if (_currentState == State.End) return;
         
@@ -217,6 +217,8 @@ public class KiteWarGame : MinigameController
         onEnemyWin?.Invoke();
 
         _currentState = State.End;
+        
+        Lose();
     }
 
 
