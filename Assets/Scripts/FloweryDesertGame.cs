@@ -43,7 +43,7 @@ public class FloweryDesertGame : MinigameController
     
     void OnEnable()
     {
-        StartGame();
+        //StartGame();
     }
 
     public override void StartGame()

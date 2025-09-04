@@ -74,7 +74,7 @@ public class KiteWarGame : MinigameController
 
     private void OnEnable()
     {
-        StartGame();
+        //StartGame();
     }
 
     public override void StartGame()

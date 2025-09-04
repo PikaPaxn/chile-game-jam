@@ -5,6 +5,8 @@ public class MinigameController : MonoBehaviour
     [Header("General Minigame Config")]
     [Tooltip("How long should the minigame be, in seconds")]
     public float timeLimit;
+    [Tooltip("Phrase to show at the beginning of the game")]
+    public string instructions = "";
 
     // State of the game
     protected enum State { Idle, Playing, End }
