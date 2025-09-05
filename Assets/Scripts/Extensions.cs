@@ -13,4 +13,9 @@ public static class InputActionButtonExtensions {
     public static bool GetButton(this InputAction action) => action.ReadValue<float>() > 0;
     public static bool GetButtonDown(this InputAction action) => action.triggered && action.ReadValue<float>() > 0;
     public static bool GetButtonUp(this InputAction action) => action.triggered && action.ReadValue<float>() == 0;
+    public static Vector2 GetVector2Down(this InputAction action) {
+        if (action.triggered)
+            return action.ReadValue<Vector2>();
+        return Vector2.zero;
+    }
 }

@@ -74,16 +74,14 @@ public class RayuelaGame : MinigameController
         }
 
         //TODO: Change to use new Input System
-        if (_currentRayuelaState == RayuelaState.Idle && anyButton.GetButtonDown() /*Input.GetButtonDown("Jump")*/) {
+        if (_currentRayuelaState == RayuelaState.Idle && anyButton.GetButtonDown()) {
             AddForce();
             _currentRayuelaState = RayuelaState.Charging;
         } else if (_currentRayuelaState == RayuelaState.Charging) {
-            //if (Input.GetButtonUp("Jump")) {
             if (anyButton.GetButtonUp()) {
                 CalcRayuelaTargetPos();
                 _currentRayuelaTime = 0;
                 _currentRayuelaState = RayuelaState.Throwing;
-            //} else if (Input.GetButton("Jump")) {
             } else if (anyButton.GetButton()) {
                 AddForce();
             }
