@@ -16,6 +16,7 @@ public class SackRaceGame : MinigameController
     [Header("Jugador")]
     [SerializeField] private Rigidbody2D player;
     [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private Sprite idle, jumping, lose;
 
     [Header("Escenario")]
     [SerializeField] private Transform world;
@@ -38,8 +39,9 @@ public class SackRaceGame : MinigameController
     public override void StartGame()
     {
         base.StartGame();
-        player.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        world.position = Vector3.zero;
+        player.transform.SetPositionAndRotation(new Vector3(0, -3.5f, 0), Quaternion.identity);
+        player.GetComponent<SpriteRenderer>().sprite = idle;
+        world.position = new Vector3(0, world.position.y, world.position.z);
         waitingForLeft = true;
         errorCount = 0;
         leftButton.SetActive(true);
@@ -49,18 +51,16 @@ public class SackRaceGame : MinigameController
 
     private void Update()
     {
+        HandleWorldMovement();
         if (_currentState == State.End)
             return;
 
         HandleInput();
-        HandleWorldMovement();
         CheckGoalReached();
     }
 
     private void FixedUpdate()
     {
-        if (_currentState == State.End)
-            return;
         CheckPhysics();
     }
 
@@ -70,13 +70,18 @@ public class SackRaceGame : MinigameController
         switch (newState)
         {
             case SackGameState.WaitingForInput:
-                EnableButton(waitingForLeft ? leftButton : rightButton);
+                if (_currentState != State.End)
+                {
+                    EnableButton(waitingForLeft ? leftButton : rightButton);
+                }
+                player.GetComponent<SpriteRenderer>().sprite = idle;
                 break;
             case SackGameState.Jumping:
                 player.linearVelocity = Vector2.zero;
                 player.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
                 DisableButtons();
                 waitingForLeft = !waitingForLeft;
+                player.GetComponent<SpriteRenderer>().sprite = jumping;
                 break;
             case SackGameState.Falling:
                 break;
@@ -123,7 +128,7 @@ public class SackRaceGame : MinigameController
         {
             DisableButtons();
             Lose();
-            player.transform.Rotate(Vector3.forward, 90);
+            player.GetComponent<SpriteRenderer>().sprite = lose;
         }
     }
 
