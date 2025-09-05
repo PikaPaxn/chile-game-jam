@@ -754,9 +754,37 @@ MonoBehaviour:
   knobRect: {fileID: 9217234005597242281}
   safeZoneRect: {fileID: 2709665573021711868}
   safeZoneWidth01: 0.9
-  inputPower: 2.2
-  accel: 6
-  damping: 6
+  movementMode: 0
+  startSpeed: 0.1
+  autoAccelBase: 0.5
+  autoAccelOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  centerDeadZone: 0.02
+  maxSpeed: 100
+  friction: 0
+  inputSpeed: 1.4
   quakeAmplitude: 0.9
   quakeFrequency: 0.7
   quakeOverTime:
@@ -838,9 +866,37 @@ MonoBehaviour:
   knobRect: {fileID: 4009187034091724999}
   safeZoneRect: {fileID: 1837574967168010797}
   safeZoneWidth01: 0.9
-  inputPower: 0.1
-  accel: 6
-  damping: 6
+  movementMode: 0
+  startSpeed: 0.1
+  autoAccelBase: 0.5
+  autoAccelOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  centerDeadZone: 0.02
+  maxSpeed: 100
+  friction: 0
+  inputSpeed: 1.4
   quakeAmplitude: 0.9
   quakeFrequency: 0.7
   quakeOverTime:
