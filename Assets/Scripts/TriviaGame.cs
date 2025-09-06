@@ -8,6 +8,7 @@ public class TriviaGame : MinigameController
     [SerializeField] Transform mapParent;
     [SerializeField] TriviaData[] data;
 
+    Button[] _buttons;
     public override void StartGame() {
         base.StartGame();
         mapParent.DestroyChildren();
@@ -36,7 +37,13 @@ public class TriviaGame : MinigameController
                 button.onClick.AddListener(() => { Lose(); });
             }
         }
+
+        if (buttons.Length > 0) {
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
+        }
     }
+
+
 
 
 }
