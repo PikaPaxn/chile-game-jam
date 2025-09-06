@@ -874,7 +874,7 @@ MonoBehaviour:
   safeZoneWidth01: 0.9
   movementMode: 0
   knobImage: {fileID: 0}
-  pressColor: {r: 1, g: 0, b: 0.06666667, a: 1}
+  pressColor: {r: 0.08652675, g: 1, b: 0, a: 1}
   pressScale: 1.2
   pressLerpDuration: 0.15
   startSpeed: 0.1

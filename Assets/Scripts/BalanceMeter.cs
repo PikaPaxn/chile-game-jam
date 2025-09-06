@@ -23,7 +23,7 @@ public class BalanceMeter : MonoBehaviour
     [SerializeField] private MovementMode movementMode = MovementMode.AutoDrift;
 
     [Header("Feedback de input")]
-    [SerializeField] private Image knobImage;        // si lo dejas vacío, se toma del knobRect
+    [SerializeField] private Image knobImage;        // si es vacío, se toma del knobRect
     [SerializeField] private Color pressColor = Color.red;
     [SerializeField] private float pressScale = 1.2f;
     [SerializeField, Range(0.05f, 0.6f)] private float pressLerpDuration = 0.15f;
@@ -55,24 +55,29 @@ public class BalanceMeter : MonoBehaviour
     [Header("Gracia al salir de la zona (segundos)")]
     [SerializeField] private float graceTime = 0.15f;
 
-    // Estado
-    float _pos;          // -1..1 (0 centrado)
-    float _vel;          // u/s
-    float _outsideTimer;
-    int _seed;
-    float _lastDir = 1f;
-    float _pressTimer;            // cuenta regresiva del pulso
-    Color _knobBaseColor;         // color original del knob
-    float _prevAxisRaw;           // para detectar "Down" del eje// -1 o +1 (dirección usada si estás en la dead-zone)
+    // estados
+    private float _pos;             // -1..1 (0 centrado)
+    private float _vel;
+    private float _outsideTimer;
+    private int _seed;
+    private float _lastDir = 1f;
+    private float _pressTimer;      // cuenta regresiva del pulso
+    private Color _knobBaseColor;   // color original del knob
+    private Vector3 _knobBaseScale; // escala original del knob
+    private float _prevAxisRaw;     // -1 o +1 (dirección usada)
 
     public float Position01 => Mathf.InverseLerp(-1f, 1f, _pos);
     public bool IsInsideSafe { get; private set; } = true;
 
-    void Awake()
+    private void Awake()
     {
         _seed = Random.Range(0, 99999);
         if (knobImage == null && knobRect != null) knobImage = knobRect.GetComponent<Image>();
-        if (knobImage != null) _knobBaseColor = knobImage.color;
+        if (knobImage != null)
+        {
+            _knobBaseColor = knobImage.color;
+            _knobBaseScale = knobImage.rectTransform.localScale;
+        }
         
         RefreshSafeZoneVisual();
         SnapKnob();
@@ -95,67 +100,69 @@ public class BalanceMeter : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // 1) INPUT: agrega VELOCIDAD (no aceleración)
+        // input del jugador: agrega velocidad (no aceleración)
         float axisInput = axis == Axis.Horizontal ? Input.GetAxisRaw("Horizontal")
                                                   : Input.GetAxisRaw("Vertical");
         
         
-        // Detectar "keyUp" del stick (solo cuando pasa de no-0 a 0)
+        // detectar "keyUp" del stick (solo cuando pasa de no-0 a 0)
         bool axisUp = !Mathf.Approximately(_prevAxisRaw, 0f) && Mathf.Approximately(axisInput, 0f); 
         if (axisUp) PulseOnRelease(); 
-        // Detectar "keyDown" del stick (solo cuando pasa de 0 a no-0)
+        // detectar "keyDown" del stick (solo cuando pasa de 0 a no-0)
         bool axisDown = Mathf.Approximately(_prevAxisRaw, 0f) && !Mathf.Approximately(axisInput, 0f); 
         if (axisDown) PulseOnPress();
         
         _vel += inputSpeed * axisInput * dt;
 
-        // 2) MOVIMIENTO AUTOMÁTICO
+        // movimiento auto
         if (movementMode == MovementMode.AutoDrift)
         {
-            // Dirección = signo de la posición, con dead-zone para evitar jitter
+            // dirección = signo de la posición, con dead zone para evitar jitter
             float dir = Mathf.Abs(_pos) < centerDeadZone ? _lastDir : Mathf.Sign(_pos);
             if (dir != 0f) _lastDir = dir;
 
             float accel = autoAccelBase * Mathf.Max(0f, autoAccelOverTime.Evaluate(progress01));
-            _vel += dir * accel * dt; // acelera HACIA el lado en el que está el knob
+            _vel += dir * accel * dt; // acelera hacia el lado en el que está el knob
         }
         else
         {
-            // Perlin (modo viejo)
+            // perlin (modo viejo)
             float t = Time.time * quakeFrequency;
             float noise = Mathf.PerlinNoise(_seed, t) * 2f - 1f;
             float quakeForce = noise * quakeAmplitude * Mathf.Max(0.05f, quakeOverTime.Evaluate(progress01));
             _vel += quakeForce * dt;
         }
 
-        // 3) Rozamiento / límite velocidad
+        // rozamiento y límite velocidad
         if (friction > 0f) _vel *= Mathf.Exp(-friction * dt);
         _vel = Mathf.Clamp(_vel, -maxSpeed, maxSpeed);
 
-        // 4) Integración de posición
+        // integración de posición
         _pos = Mathf.Clamp(_pos + _vel * dt, -1f, 1f);
 
-        // 5) Safe-zone (usa todo el porcentaje visual)
+        // safe zone
         float halfSafe = Mathf.Clamp01(safeZoneWidth01);
         IsInsideSafe = Mathf.Abs(_pos) <= halfSafe;
         _outsideTimer = IsInsideSafe ? 0f : _outsideTimer + dt;
         
-        // --- LERP del color del knob ---
+        // lerp del color del knob
         if (_pressTimer > 0f && knobImage != null)
         {
             _pressTimer = Mathf.Max(0f, _pressTimer - dt);
             float tLerp = 1f - (_pressTimer / pressLerpDuration); // 0→1
             knobImage.color = Color.Lerp(pressColor, _knobBaseColor, tLerp);
-            knobImage.rectTransform.localScale = Vector3.Lerp(new Vector3(pressScale, pressScale, 1f), new Vector3(1f, 1f, 1f), tLerp);
+            Vector3 big = _knobBaseScale * pressScale;
+            knobImage.rectTransform.localScale = Vector3.Lerp(big, new Vector3(1f, 1f, 1f), tLerp);
         }
 
-        // 6) Visual
+        // visual
         SnapKnob();
         _prevAxisRaw = axisInput;
     }
     
     void PulseOnPress()
     {
+        _pressTimer = 0f; //cancela los lerps
         if (knobImage != null)
         {
             knobImage.color = pressColor;
