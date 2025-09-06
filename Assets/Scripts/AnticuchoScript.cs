@@ -13,6 +13,7 @@ public class AnticuchoScript : MinigameController
     [SerializeField] private int targetPosition = 50;
     [SerializeField] private float speed;
     [SerializeField] private float timeToDelay;
+    [SerializeField] private int difficulty = 5;
 
     [Header("Events")]
     public UnityEvent onWin;
@@ -37,6 +38,7 @@ public class AnticuchoScript : MinigameController
 
     public void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Space) && transform.localPosition.x == startingPosition)
         {
             GetComponent<BoxCollider2D>().enabled = true;
