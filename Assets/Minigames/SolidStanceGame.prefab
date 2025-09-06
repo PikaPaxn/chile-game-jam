@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 2709665573021711868}
   - component: {fileID: 6384623282199505488}
   - component: {fileID: 4073814137715653935}
+  - component: {fileID: 6695342232542009130}
   m_Layer: 0
   m_Name: SafeZone
   m_TagString: Untagged
@@ -137,7 +138,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 540}
+  m_SizeDelta: {x: 25, y: 570}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6384623282199505488
 CanvasRenderer:
@@ -160,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.0047169924, g: 1, b: 0.089137875, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -177,6 +178,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6695342232542009130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830352722525548265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fb40bcab71c964e90c5ba90fe80e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerColor: {r: 0.16470589, g: 0.9372549, b: 0.6039216, a: 1}
+  edgeColor: {r: 1, g: 0.23137255, b: 0.1882353, a: 1}
+  vertical: 1
+  resolution: 256
+  useHSV: 1
+  curvePower: 2
 --- !u!1 &2599800002543024784
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,15 +256,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.495283, g: 0.52136225, b: 1, a: 1}
+  m_Color: {r: 0.12156863, g: 0.15686275, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -312,7 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9342736, b: 0, a: 1}
+  m_Color: {r: 0.99215686, g: 0.87058824, b: 0.12156863, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -466,15 +485,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.495283, g: 0.52136225, b: 1, a: 1}
+  m_Color: {r: 0.12156863, g: 0.15686275, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -541,7 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9342736, b: 0, a: 1}
+  m_Color: {r: 0.9921569, g: 0.8705883, b: 0.121568635, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -638,6 +657,7 @@ GameObject:
   - component: {fileID: 1837574967168010797}
   - component: {fileID: 7501639332440364274}
   - component: {fileID: 2426216266198917804}
+  - component: {fileID: 4110036376961823852}
   m_Layer: 0
   m_Name: SafeZone
   m_TagString: Untagged
@@ -662,7 +682,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 540, y: 40}
+  m_SizeDelta: {x: 570, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7501639332440364274
 CanvasRenderer:
@@ -685,7 +705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.0047169924, g: 1, b: 0.089137875, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -702,6 +722,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4110036376961823852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6615130769989468371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fb40bcab71c964e90c5ba90fe80e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerColor: {r: 0.16470589, g: 0.9372549, b: 0.6039216, a: 1}
+  edgeColor: {r: 1, g: 0.23137255, b: 0.1882353, a: 1}
+  vertical: 0
+  resolution: 256
+  useHSV: 1
+  curvePower: 2
 --- !u!1 &6921793948582693488
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,8 +774,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -264, y: -8}
-  m_SizeDelta: {x: 40, y: 600}
+  m_AnchoredPosition: {x: -264, y: 0}
+  m_SizeDelta: {x: 50, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5589440751243200183
 MonoBehaviour:
@@ -755,10 +793,10 @@ MonoBehaviour:
   trackRect: {fileID: 3928923028037610228}
   knobRect: {fileID: 9217234005597242281}
   safeZoneRect: {fileID: 2709665573021711868}
-  safeZoneWidth01: 0.9
+  safeZoneWidth01: 0.95
   movementMode: 0
   knobImage: {fileID: 0}
-  pressColor: {r: 1, g: 0, b: 0, a: 1}
+  pressColor: {r: 0.99215686, g: 0.7254902, b: 0.12156863, a: 1}
   pressScale: 1.2
   pressLerpDuration: 0.15
   startSpeed: 0.1
@@ -853,7 +891,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: -28, y: 891}
-  m_SizeDelta: {x: 600, y: 40}
+  m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7069785697219620500
 MonoBehaviour:
@@ -871,10 +909,10 @@ MonoBehaviour:
   trackRect: {fileID: 7195410550412260388}
   knobRect: {fileID: 4009187034091724999}
   safeZoneRect: {fileID: 1837574967168010797}
-  safeZoneWidth01: 0.9
+  safeZoneWidth01: 0.95
   movementMode: 0
   knobImage: {fileID: 0}
-  pressColor: {r: 0.08652675, g: 1, b: 0, a: 1}
+  pressColor: {r: 0.99215686, g: 0.72422034, b: 0.12156861, a: 1}
   pressScale: 1.2
   pressLerpDuration: 0.15
   startSpeed: 0.1
