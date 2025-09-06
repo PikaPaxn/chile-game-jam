@@ -73,6 +73,11 @@ public class MinigamesCoordinator : MonoBehaviour
         if (!_currentMinigame.IsPlaying || timeDone) {
             Debug.Log($"Did you won? {_currentMinigame.HasWon}");
 
+            // If we lost by time, call Lose to update the internal state
+            if (timeDone && _currentMinigame.IsPlaying) {
+                _currentMinigame.Lose();
+            }
+
             // Check if won
             if (_currentMinigame.HasWon) {
                 wonGO.SetActive(true);

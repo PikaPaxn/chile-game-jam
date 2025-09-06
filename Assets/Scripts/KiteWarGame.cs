@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class KiteWarGame : MinigameController
@@ -60,6 +61,8 @@ public class KiteWarGame : MinigameController
     [Header("Eventos")]
     public UnityEvent onPlayerHit, onEnemyHit, onPlayerWin, onEnemyWin;
 
+    // Input
+    private InputAction directions;
     private enum Direction { Up, Down, Left, Right }
 
     private readonly List<Direction> _currentSequence = new();
@@ -71,6 +74,10 @@ public class KiteWarGame : MinigameController
     private float _roundDeadline;
     
     private float _roundDuration;   // ← tiempo límite de la ronda
+
+    private void Start() {
+        directions = InputSystem.actions.FindAction("Directions");
+    }
 
     private void OnEnable()
     {
@@ -224,10 +231,13 @@ public class KiteWarGame : MinigameController
 
     private Direction? ReadInput()
     {
-        if (Input.GetButtonDown("DirectionUp")) return Direction.Up;
-        if (Input.GetButtonDown("DirectionDown")) return Direction.Down;
-        if (Input.GetButtonDown("DirectionLeft")) return Direction.Left;
-        if (Input.GetButtonDown("DirectionRight")) return Direction.Right;
+        // TODO: Test deadzones for gamepad input
+        var currentDir = directions.GetVector2Down(); // Directions are a 2d input, one per axis
+        print($"currentDir.x: {currentDir.x} | currentDir.y: {currentDir.y}");
+        if (currentDir.y > 0) return Direction.Up;
+        if (currentDir.y < 0) return Direction.Down;
+        if (currentDir.x < 0) return Direction.Left;
+        if (currentDir.x > 0) return Direction.Right;
         return null;
     }
 

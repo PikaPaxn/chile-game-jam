@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+
 public class RayuelaGame : MinigameController
 {
     [Header("Game Object References")]
@@ -23,8 +25,15 @@ public class RayuelaGame : MinigameController
     [SerializeField] AnimationCurve rayuelaFlight = AnimationCurve.EaseInOut(0, 0, 1, 1);
     float _currentRayuelaTime;
 
+    // Input
+    InputAction anyButton;
+
     enum RayuelaState { Idle, Charging, Throwing, Done }
     RayuelaState _currentRayuelaState;
+
+    void Start() {
+        anyButton = InputSystem.actions.FindAction("AnyButton");
+    }
 
     void OnEnable() {
         if (rayuela.localPosition != Vector3.zero) {
@@ -65,15 +74,15 @@ public class RayuelaGame : MinigameController
         }
 
         //TODO: Change to use new Input System
-        if (_currentRayuelaState == RayuelaState.Idle && Input.GetButtonDown("Jump")) {
+        if (_currentRayuelaState == RayuelaState.Idle && anyButton.GetButtonDown()) {
             AddForce();
             _currentRayuelaState = RayuelaState.Charging;
         } else if (_currentRayuelaState == RayuelaState.Charging) {
-            if (Input.GetButtonUp("Jump")) {
+            if (anyButton.GetButtonUp()) {
                 CalcRayuelaTargetPos();
                 _currentRayuelaTime = 0;
                 _currentRayuelaState = RayuelaState.Throwing;
-            } else if (Input.GetButton("Jump")) {
+            } else if (anyButton.GetButton()) {
                 AddForce();
             }
         } else if (_currentRayuelaState == RayuelaState.Throwing) {
