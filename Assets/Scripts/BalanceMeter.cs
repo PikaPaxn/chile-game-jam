@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,12 @@ public class BalanceMeter : MonoBehaviour
     [Header("Modo de movimiento")]
     [SerializeField] private MovementMode movementMode = MovementMode.AutoDrift;
 
-    // ====== AUTO-DRIFT que empuja hacia el lado actual del knob ======
+    [Header("Feedback de input")]
+    [SerializeField] private Image knobImage;        // si lo dejas vacío, se toma del knobRect
+    [SerializeField] private Color pressColor = Color.red;
+    [SerializeField] private float pressScale = 1.2f;
+    [SerializeField, Range(0.05f, 0.6f)] private float pressLerpDuration = 0.15f;
+    
     [Header("Auto-Drift")]
     [Tooltip("Velocidad inicial (normalizada por segundo).")]
     [SerializeField] private float startSpeed = 0.06f;
@@ -40,7 +46,7 @@ public class BalanceMeter : MonoBehaviour
     [Tooltip("Cuánta velocidad por segundo agrega tu input")]
     [SerializeField] private float inputSpeed = 1.4f;
 
-    // ====== PERLIN opcional (por si quieres volver) ======
+    //Modo Terremoto
     [Header("Perlin Quake (si eliges ese modo)")]
     [SerializeField] private float quakeAmplitude = 0.9f;
     [SerializeField] private float quakeFrequency = 0.7f;
@@ -54,7 +60,10 @@ public class BalanceMeter : MonoBehaviour
     float _vel;          // u/s
     float _outsideTimer;
     int _seed;
-    float _lastDir = 1f; // -1 o +1 (dirección usada si estás en la dead-zone)
+    float _lastDir = 1f;
+    float _pressTimer;            // cuenta regresiva del pulso
+    Color _knobBaseColor;         // color original del knob
+    float _prevAxisRaw;           // para detectar "Down" del eje// -1 o +1 (dirección usada si estás en la dead-zone)
 
     public float Position01 => Mathf.InverseLerp(-1f, 1f, _pos);
     public bool IsInsideSafe { get; private set; } = true;
@@ -62,6 +71,9 @@ public class BalanceMeter : MonoBehaviour
     void Awake()
     {
         _seed = Random.Range(0, 99999);
+        if (knobImage == null && knobRect != null) knobImage = knobRect.GetComponent<Image>();
+        if (knobImage != null) _knobBaseColor = knobImage.color;
+        
         RefreshSafeZoneVisual();
         SnapKnob();
     }
@@ -86,6 +98,15 @@ public class BalanceMeter : MonoBehaviour
         // 1) INPUT: agrega VELOCIDAD (no aceleración)
         float axisInput = axis == Axis.Horizontal ? Input.GetAxisRaw("Horizontal")
                                                   : Input.GetAxisRaw("Vertical");
+        
+        
+        // Detectar "keyUp" del stick (solo cuando pasa de no-0 a 0)
+        bool axisUp = !Mathf.Approximately(_prevAxisRaw, 0f) && Mathf.Approximately(axisInput, 0f); 
+        if (axisUp) PulseOnRelease(); 
+        // Detectar "keyDown" del stick (solo cuando pasa de 0 a no-0)
+        bool axisDown = Mathf.Approximately(_prevAxisRaw, 0f) && !Mathf.Approximately(axisInput, 0f); 
+        if (axisDown) PulseOnPress();
+        
         _vel += inputSpeed * axisInput * dt;
 
         // 2) MOVIMIENTO AUTOMÁTICO
@@ -118,9 +139,23 @@ public class BalanceMeter : MonoBehaviour
         float halfSafe = Mathf.Clamp01(safeZoneWidth01);
         IsInsideSafe = Mathf.Abs(_pos) <= halfSafe;
         _outsideTimer = IsInsideSafe ? 0f : _outsideTimer + dt;
+        
+        // --- LERP del color del knob ---
+        if (!Mathf.Approximately(axisInput, 0f))
+        {
+            knobImage.color = pressColor;
+        }
+        if (_pressTimer > 0f && knobImage != null)
+        {
+            _pressTimer = Mathf.Max(0f, _pressTimer - dt);
+            float tLerp = 1f - (_pressTimer / pressLerpDuration); // 0→1
+            knobImage.color = Color.Lerp(pressColor, _knobBaseColor, tLerp);
+            knobImage.rectTransform.localScale = Vector3.Lerp(new Vector3(pressScale, pressScale, 1f), new Vector3(1f, 1f, 1f), tLerp);
+        }
 
         // 6) Visual
         SnapKnob();
+        _prevAxisRaw = axisInput;
     }
 
     public bool HasFailed()
@@ -164,6 +199,15 @@ public class BalanceMeter : MonoBehaviour
             size.y = trackRect.rect.height * safeZoneWidth01;
             safeZoneRect.sizeDelta = size;
         }
+    }
+    
+    
+    void PulseOnPress()
+    {
+        if (knobImage != null) knobImage.color = pressColor;
+    } 
+    void PulseOnRelease() { 
+        _pressTimer = pressLerpDuration; // reinicia el pulso
     }
 
 #if UNITY_EDITOR

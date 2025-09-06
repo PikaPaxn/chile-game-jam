@@ -604,6 +604,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: 15
+  instructions: "Mant\xE9n el equilibrio!"
+  shouldWinOnTimeEnd: 1
   mode: 1
   horizontalMeter: {fileID: 7069785697219620500}
   verticalMeter: {fileID: 5589440751243200183}
@@ -754,7 +756,11 @@ MonoBehaviour:
   knobRect: {fileID: 9217234005597242281}
   safeZoneRect: {fileID: 2709665573021711868}
   safeZoneWidth01: 0.9
-  movementMode: 0
+  movementMode: 1
+  knobImage: {fileID: 0}
+  pressColor: {r: 1, g: 0, b: 0, a: 1}
+  pressScale: 1.2
+  pressLerpDuration: 0.15
   startSpeed: 0.1
   autoAccelBase: 0.5
   autoAccelOverTime:
@@ -867,6 +873,10 @@ MonoBehaviour:
   safeZoneRect: {fileID: 1837574967168010797}
   safeZoneWidth01: 0.9
   movementMode: 0
+  knobImage: {fileID: 0}
+  pressColor: {r: 1, g: 0, b: 0.06666667, a: 1}
+  pressScale: 1.2
+  pressLerpDuration: 0.15
   startSpeed: 0.1
   autoAccelBase: 0.5
   autoAccelOverTime:
