@@ -5,6 +5,10 @@ public class MinigameController : MonoBehaviour
     [Header("General Minigame Config")]
     [Tooltip("How long should the minigame be, in seconds")]
     public float timeLimit;
+    [Tooltip("Phrase to show at the beginning of the game")]
+    public string instructions = "";
+    [Tooltip("Should it win once the time is over?")]
+    public bool shouldWinOnTimeEnd = true;
 
     // State of the game
     protected enum State { Idle, Playing, End }
@@ -39,6 +43,13 @@ public class MinigameController : MonoBehaviour
         Debug.Log("You lost the Minigame! :(", gameObject);
         _hasWon = false;
         _currentState = State.End;
+    }
+
+    public void TimeEnded() {
+        if (shouldWinOnTimeEnd)
+            Won();
+        else
+            Lose();
     }
 
     public bool IsPlaying => _currentState == State.Playing;
