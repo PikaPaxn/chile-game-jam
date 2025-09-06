@@ -736,7 +736,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -120, y: 0}
+  m_AnchoredPosition: {x: -264, y: -8}
   m_SizeDelta: {x: 40, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5589440751243200183
@@ -756,7 +756,7 @@ MonoBehaviour:
   knobRect: {fileID: 9217234005597242281}
   safeZoneRect: {fileID: 2709665573021711868}
   safeZoneWidth01: 0.9
-  movementMode: 1
+  movementMode: 0
   knobImage: {fileID: 0}
   pressColor: {r: 1, g: 0, b: 0, a: 1}
   pressScale: 1.2
@@ -852,7 +852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 800}
+  m_AnchoredPosition: {x: -28, y: 891}
   m_SizeDelta: {x: 600, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7069785697219620500

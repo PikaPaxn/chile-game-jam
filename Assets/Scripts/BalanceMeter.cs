@@ -141,10 +141,6 @@ public class BalanceMeter : MonoBehaviour
         _outsideTimer = IsInsideSafe ? 0f : _outsideTimer + dt;
         
         // --- LERP del color del knob ---
-        if (!Mathf.Approximately(axisInput, 0f))
-        {
-            knobImage.color = pressColor;
-        }
         if (_pressTimer > 0f && knobImage != null)
         {
             _pressTimer = Mathf.Max(0f, _pressTimer - dt);
@@ -156,6 +152,18 @@ public class BalanceMeter : MonoBehaviour
         // 6) Visual
         SnapKnob();
         _prevAxisRaw = axisInput;
+    }
+    
+    void PulseOnPress()
+    {
+        if (knobImage != null)
+        {
+            knobImage.color = pressColor;
+            knobImage.rectTransform.localScale = new Vector3(pressScale, pressScale, 1f);
+        }
+    } 
+    void PulseOnRelease() { 
+        _pressTimer = pressLerpDuration; // reinicia el pulso
     }
 
     public bool HasFailed()
@@ -199,15 +207,6 @@ public class BalanceMeter : MonoBehaviour
             size.y = trackRect.rect.height * safeZoneWidth01;
             safeZoneRect.sizeDelta = size;
         }
-    }
-    
-    
-    void PulseOnPress()
-    {
-        if (knobImage != null) knobImage.color = pressColor;
-    } 
-    void PulseOnRelease() { 
-        _pressTimer = pressLerpDuration; // reinicia el pulso
     }
 
 #if UNITY_EDITOR
