@@ -28,6 +28,7 @@ public class MinigamesCoordinator : MonoBehaviour
     public GameObject[] transitions;
     public GameObject kites;
     public int lives = 3;
+    private bool _gameOverShown = false;
     public GameObject gameOverUI;
 
 
@@ -64,13 +65,18 @@ public class MinigamesCoordinator : MonoBehaviour
         {
             ResetUI();
 
-            if (lives <= 0)
+            if (lives <= 0 && !_gameOverShown)
             {
                 StartCoroutine(GameOverSequence());
+                _gameOverShown = true;
                 return;
             }
-            StartCoroutine(StartMinigameWithAnimation());
-            CurrentState = CoordinatorStates.WaitingForGame;
+            else if (lives > 0)
+            {
+                StartCoroutine(StartMinigameWithAnimation());
+                CurrentState = CoordinatorStates.WaitingForGame;
+            }
+
         }
     }
 
@@ -83,7 +89,7 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         // Show Game Over UI
         gameOverUI.SetActive(true);
-        yield return new WaitForSeconds(3f); // Wait for 3 seconds
+        yield return new WaitForSeconds(2f); // Wait for 3 seconds
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -244,7 +250,8 @@ public class MinigamesCoordinator : MonoBehaviour
         loseGO.SetActive(false);
     }
 
-    internal void PauseMinigame(bool pause) {
+    internal void PauseMinigame(bool pause)
+    {
         _currentMinigame.Pausing(pause);
     }
 }
