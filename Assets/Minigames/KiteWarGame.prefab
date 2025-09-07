@@ -880,6 +880,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: -1
+  instructions: Completa la Secuencia
+  shouldWinOnTimeEnd: 1
   roundLengths: 010000000300000005000000
   perRoundTime: 3
   roundTimeMultiplier: 0.9

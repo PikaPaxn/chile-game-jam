@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: 7
-  instructions: "Clickea la Regi\xF3n!"
+  instructions: "\xA1Clickea la Regi\xF3n!"
   shouldWinOnTimeEnd: 0
   questionText: {fileID: 4640957410189753156}
   mapParent: {fileID: 6852542038620111450}
