@@ -46,6 +46,7 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         ResetUI();
         CurrentState = CoordinatorStates.Idle;
+        _stateChangedTime = Time.time - 2f; // Start as soon as the scene loads
         _timeSliderAnimator = timeLeftSlider.GetComponent<Animator>();
     }
 

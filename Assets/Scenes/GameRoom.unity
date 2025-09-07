@@ -5897,6 +5897,8 @@ MonoBehaviour:
   - {fileID: 587208181438685960, guid: fa95fdf436904d144b617d12d04dad10, type: 3}
   - {fileID: 5115213185797789338, guid: f388871505d7e594bace6f4ea3b64390, type: 3}
   - {fileID: 721395577906222163, guid: b3d68753750744544a897e70b2d1e16a, type: 3}
+  - {fileID: 5328390441111784903, guid: 39f0551e22fc4a84a86cea2fcea51e88, type: 3}
+  - {fileID: 329450140561777813, guid: 622b6cbc0179e634db574c27a7dc0452, type: 3}
   timeLeftSlider: {fileID: 246923806}
   wonGO: {fileID: 133320836}
   loseGO: {fileID: 864402264}

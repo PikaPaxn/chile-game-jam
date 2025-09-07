@@ -78,4 +78,8 @@ public class MinigameController : MonoBehaviour
             _currentState = _prePausedState;
         }
     }
+
+    public override bool Equals(object other) {
+        return other.GetType() == GetType();
+    }
 }
