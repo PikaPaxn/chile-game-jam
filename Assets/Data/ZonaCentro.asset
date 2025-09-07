@@ -16,15 +16,15 @@ MonoBehaviour:
   preferredRotation: 100
   preferredScale: 0.5
   questions:
-  - question: Clickea Valparaiso!
+  - question: Valparaiso
     answer: V
-  - question: Clickea Metropolitana!
+  - question: Metropolitana
     answer: RM
-  - question: Clickea O'Higgins!
+  - question: O'Higgins
     answer: VI
-  - question: Clickea Maule!
+  - question: Maule
     answer: VII
-  - question: "Clickea \xD1uble!"
+  - question: "\xD1uble"
     answer: XVI
-  - question: Clickea Bio-Bio!
+  - question: Bio-Bio
     answer: VIII

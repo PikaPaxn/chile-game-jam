@@ -16,13 +16,13 @@ MonoBehaviour:
   preferredRotation: 95
   preferredScale: 0.25
   questions:
-  - question: "Clickea Araucan\xEDa!"
+  - question: "Araucan\xEDa"
     answer: IX
-  - question: "Clickea Los R\xEDos!"
+  - question: "Los R\xEDos"
     answer: XIV
-  - question: Clickea Los Lagos!
+  - question: Los Lagos
     answer: X
-  - question: "Clickea Ays\xE9n!"
+  - question: "Ays\xE9n"
     answer: XI
-  - question: Clickea Magallanes!
+  - question: Magallanes
     answer: XII
