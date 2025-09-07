@@ -126,6 +126,8 @@ public class MinigamesCoordinator : MonoBehaviour
         {
             counterText.gameObject.SetActive(true);
             counterText.text = _currentMinigame.instructions;
+            yield return new WaitForSeconds(1f);
+            counterText.text = "";
         }
         StartChoosenMinigame();
         CurrentState = CoordinatorStates.PlayingGame;

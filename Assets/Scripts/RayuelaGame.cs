@@ -74,7 +74,7 @@ public class RayuelaGame : MinigameController
         }
 
         //TODO: Change to use new Input System
-        if (_currentRayuelaState == RayuelaState.Idle && anyButton.GetButtonDown()) {
+        if (_currentRayuelaState == RayuelaState.Idle && anyButton.GetButtonDown() && IsPlaying) {
             AddForce();
             _currentRayuelaState = RayuelaState.Charging;
         } else if (_currentRayuelaState == RayuelaState.Charging) {

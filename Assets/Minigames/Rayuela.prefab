@@ -729,9 +729,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f83b2bfbfe504f94fa6c04b3d6c36e70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: -1
-  instructions: "\xA1Lanza!"
-  shouldWinOnTimeEnd: 1
+  timeLimit: 8
+  instructions: Achuntale
+  shouldWinOnTimeEnd: 0
   forceSlider: {fileID: 8212523443507816556}
   arena: {fileID: 1679594462532930729}
   arenaTarget: {fileID: 8728427669528160281}
@@ -739,7 +739,7 @@ MonoBehaviour:
   rayuela: {fileID: 481107406341263149}
   forceSpeed: 0.8
   forceContraints: {x: 0.1, y: 1}
-  forceMargin: 0.2
+  forceMargin: 0.13
   rayuelaTimeToFlight: 1.15
   rayuelaFlight:
     serializedVersion: 2
