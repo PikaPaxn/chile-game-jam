@@ -11,8 +11,9 @@ public class MinigameController : MonoBehaviour
     public bool shouldWinOnTimeEnd = true;
 
     // State of the game
-    protected enum State { Idle, Playing, End }
+    protected enum State { Idle, Playing, End, Paused }
     protected State _currentState = State.Idle;
+    State _prePausedState = State.Playing;
 
     // Manage if the game has ended
     float _startTime;
@@ -53,6 +54,7 @@ public class MinigameController : MonoBehaviour
     }
 
     public bool IsPlaying => _currentState == State.Playing;
+    public bool IsPaused => _currentState == State.Paused;
 
     // Coordinator references
     public bool HasWon => _hasWon;
@@ -66,5 +68,14 @@ public class MinigameController : MonoBehaviour
     public float TimeLeft01() {
         float timePassed = Time.time - _startTime;
         return 1f - Mathf.InverseLerp(0, timeLimit, timePassed);
+    }
+
+    internal void Pausing(bool pause) {
+        if (pause) {
+            _prePausedState = _currentState;
+            _currentState = State.Paused;
+        } else {
+            _currentState = _prePausedState;
+        }
     }
 }

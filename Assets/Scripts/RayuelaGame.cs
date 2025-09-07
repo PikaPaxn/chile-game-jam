@@ -68,6 +68,9 @@ public class RayuelaGame : MinigameController
     // Update is called once per frame
     void Update()
     {
+        if (IsPaused)
+            return;
+
         if (_rayuelaPendingPos && rayuela.localPosition != Vector3.zero) {
             _rayuelaInitialPos = rayuela.localPosition;
             _rayuelaPendingPos = false;
