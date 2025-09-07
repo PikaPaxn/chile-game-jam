@@ -424,6 +424,7 @@ MonoBehaviour:
   timeLeftSlider: {fileID: 246923806}
   wonGO: {fileID: 75424972}
   loseGO: {fileID: 864402264}
+  counterText: {fileID: 0}
 --- !u!4 &503079296
 Transform:
   m_ObjectHideFlags: 0

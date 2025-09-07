@@ -42,8 +42,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Glass TOP
-    uniqueID: 2785473299
+  - name: ParticlesOnTop
+    uniqueID: 779313929
     locked: 0
   m_RenderingLayers:
   - Default
