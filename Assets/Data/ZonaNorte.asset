@@ -16,13 +16,13 @@ MonoBehaviour:
   preferredRotation: 90
   preferredScale: 0.3
   questions:
-  - question: Clickea Arica y Parinacota!
+  - question: Arica y Parinacota
     answer: XV
-  - question: "Clickea Tarapac\xE1!"
+  - question: "Tarapac\xE1"
     answer: I
-  - question: Clickea Antofagasta!
+  - question: Antofagasta
     answer: II
-  - question: Clickea Atacama!
+  - question: Atacama
     answer: III
-  - question: Clickea Coquimbo!
+  - question: Coquimbo
     answer: IV

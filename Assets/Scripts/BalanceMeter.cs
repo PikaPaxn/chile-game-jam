@@ -1,9 +1,9 @@
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class BalanceMeter : MonoBehaviour
-{
+public class BalanceMeter : MonoBehaviour {
     public enum Axis { Horizontal, Vertical }
     public enum MovementMode { AutoDrift, PerlinQuake }
 
@@ -27,7 +27,7 @@ public class BalanceMeter : MonoBehaviour
     [SerializeField] private Color pressColor = Color.red;
     [SerializeField] private float pressScale = 1.2f;
     [SerializeField, Range(0.05f, 0.6f)] private float pressLerpDuration = 0.15f;
-    
+
     [Header("Auto-Drift")]
     [Tooltip("Velocidad inicial (normalizada por segundo).")]
     [SerializeField] private float startSpeed = 0.06f;
@@ -45,6 +45,7 @@ public class BalanceMeter : MonoBehaviour
     [Header("Input del jugador (suma velocidad, NO aceleración)")]
     [Tooltip("Cuánta velocidad por segundo agrega tu input")]
     [SerializeField] private float inputSpeed = 1.4f;
+    private InputAction _direction;
 
     //Modo Terremoto
     [Header("Perlin Quake (si eliges ese modo)")]
@@ -83,6 +84,10 @@ public class BalanceMeter : MonoBehaviour
         SnapKnob();
     }
 
+    private void Start() {
+        _direction = InputSystem.actions.FindAction("Directions");
+    }
+
     public void ResetMeter(float startPos = 0f)
     {
         _pos = Mathf.Clamp(startPos, -1f, 1f);
@@ -101,8 +106,8 @@ public class BalanceMeter : MonoBehaviour
         float dt = Time.deltaTime;
 
         // input del jugador: agrega velocidad (no aceleración)
-        float axisInput = axis == Axis.Horizontal ? Input.GetAxisRaw("Horizontal")
-                                                  : Input.GetAxisRaw("Vertical");
+        float axisInput = axis == Axis.Horizontal ? _direction.ReadValue<Vector2>().x
+                                                  : _direction.ReadValue<Vector2>().y;
         
         
         // detectar "keyUp" del stick (solo cuando pasa de no-0 a 0)
