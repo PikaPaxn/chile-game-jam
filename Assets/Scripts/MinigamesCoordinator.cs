@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MinigamesCoordinator : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class MinigamesCoordinator : MonoBehaviour
 
     [Header("Transitions")]
     public GameObject[] transitions;
+    public GameObject kites;
+    public int lives = 3;
+    public GameObject gameOverUI;
 
 
     CoordinatorStates CurrentState
@@ -60,6 +64,11 @@ public class MinigamesCoordinator : MonoBehaviour
         {
             ResetUI();
 
+            if (lives <= 0)
+            {
+                StartCoroutine(GameOverSequence());
+                return;
+            }
             StartCoroutine(StartMinigameWithAnimation());
             CurrentState = CoordinatorStates.WaitingForGame;
         }
@@ -68,6 +77,14 @@ public class MinigamesCoordinator : MonoBehaviour
     void WaitingForGameUpdate()
     {
 
+    }
+
+    IEnumerator GameOverSequence()
+    {
+        // Show Game Over UI
+        gameOverUI.SetActive(true);
+        yield return new WaitForSeconds(3f); // Wait for 3 seconds
+        SceneManager.LoadScene("MainMenu");
     }
 
     void PlayingGameUpdate()
@@ -107,6 +124,13 @@ public class MinigamesCoordinator : MonoBehaviour
             else
             {
                 loseGO.SetActive(true);
+                lives--;
+                if (lives <= 0)
+                {
+                    Debug.Log("Game Over!");
+                    // Show Game Over UI
+
+                }
             }
 
             CurrentState = CoordinatorStates.Idle;
@@ -120,6 +144,42 @@ public class MinigamesCoordinator : MonoBehaviour
         {
             var transition = transitions.RandomPick();
             transition.SetActive(true);
+        }
+
+        // Play kites lives animation
+        if (kites != null)
+        {
+            var childsCount = kites.transform.childCount;
+            kites.SetActive(false);
+            kites.SetActive(true);
+            // Enable all kites
+            for (int i = 0; i < childsCount; i++)
+            {
+                kites.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            if (lives == 2)
+            {
+                // Disable half
+                for (int i = 0; i < childsCount; i++)
+                {
+                    if (i < childsCount / 2) kites.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+            else if (lives == 1)
+            {
+                // Disable all but one
+                for (int i = 0; i < childsCount; i++)
+                {
+                    if (i != 0) kites.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
+            else if (lives <= 0)
+            {
+                for (int i = 0; i < childsCount; i++)
+                {
+                    kites.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
         }
         yield return _waitForSeconds1;
 
@@ -162,7 +222,8 @@ public class MinigamesCoordinator : MonoBehaviour
         _currentMinigame.StartGame();
         CurrentState = CoordinatorStates.PlayingGame;
         ResetUI();
-        if (_timeSliderAnimator) {
+        if (_timeSliderAnimator)
+        {
             _timeSliderAnimator.SetBool("UsesTime", _currentMinigame.UseTime);
         }
     }
