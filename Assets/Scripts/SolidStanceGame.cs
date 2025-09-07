@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class SolidStanceGame : MinigameController
 {
-    public enum Mode { HorizontalBar, TwoBars}
+    public enum Mode { HorizontalBar, TwoBars }
     [Header("Modo")]
     [SerializeField] private Mode mode = Mode.HorizontalBar;
 
@@ -20,6 +20,8 @@ public class SolidStanceGame : MinigameController
 
     [Header("Eventos")]
     public UnityEvent onLose;
+
+    public ObjectVibration _vibration;
 
     void Update()
     {
@@ -39,6 +41,8 @@ public class SolidStanceGame : MinigameController
         {
             _currentState = State.End; // HasWon queda false
             onLose?.Invoke();
+            // No sé si poner esto o no.
+            // _vibration.intensity = 0f;
             return;
         }
 
@@ -75,6 +79,15 @@ public class SolidStanceGame : MinigameController
 
         if (mode == Mode.TwoBars && verticalMeter != null)
             leanY = Mathf.Clamp(verticalMeter.Position01 * 2f - 1f, -1f, 1f);
+
+        if (_vibration != null)
+        {
+            // Elegir el eje con más inclinación
+            if (mode == Mode.TwoBars)
+                _vibration.intensity = Mathf.Max(Mathf.Abs(leanX), Mathf.Abs(leanY));
+            else
+                _vibration.intensity = Mathf.Abs(leanX);
+        }
 
         if (tiltTransform != null)
         {
