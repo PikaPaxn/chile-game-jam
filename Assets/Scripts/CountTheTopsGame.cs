@@ -63,9 +63,10 @@ public class CountTheTopsGame : MinigameController
         HandleInputs();
         UpdateTimerUI();
 
-        if (TimeLeft01() <= 0f)
+        if (TimeLeft01() <= 0.02f)
         {
             FinishAndEvaluate();
+            
         }
     }
 
@@ -91,13 +92,6 @@ public class CountTheTopsGame : MinigameController
         if (_currentState != State.Playing) return;
         playerCount++;
         UpdateUI();
-    }
-
-    // Llama este método desde un botón UI
-    public void OnPressCount()
-    {
-        if (_currentState != State.Playing) return;
-        IncrementPlayerCount();
     }
 
     private void UpdateUI()
