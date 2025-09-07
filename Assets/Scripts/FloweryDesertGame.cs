@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class FloweryDesertGame : MinigameController
 {
@@ -30,7 +31,8 @@ public class FloweryDesertGame : MinigameController
 
     private enum State { Idle, Playing, Ended }
     private State _state = State.Idle;
-
+    // Input
+    InputAction anyButton;
     
     [Header("Rain configuration")]
     // Exponente de la curva (2 = cuadrática clásica). 
@@ -41,9 +43,13 @@ public class FloweryDesertGame : MinigameController
     [SerializeField] private bool quantizeTo5Levels = false;
     [SerializeField] private int maxRainParticles = 100;
     
+    void Start() {
+        anyButton = InputSystem.actions.FindAction("AnyButton");
+    }
+
     void OnEnable()
     {
-        StartGame();
+        //StartGame();
     }
 
     public override void StartGame()
@@ -63,7 +69,7 @@ public class FloweryDesertGame : MinigameController
     {
         if (_state != State.Playing) return;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (anyButton.GetButtonDown())
         {
             _clicks++;
             if (sfxTap != null) sfxTap.Play();

@@ -1,68 +1,171 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MinigamesCoordinator : MonoBehaviour
 {
+
+    private static readonly WaitForSeconds _waitForSeconds1 = new(1f);
     [Header("Minigames List")]
     public MinigameController[] minigames;
     MinigameController _currentMinigameType;
     MinigameController _currentMinigame;
-    bool _minigameDone = false;
 
     [Header("UI Refs")]
     public Slider timeLeftSlider;
     public GameObject wonGO;
     public GameObject loseGO;
+    public TextMeshProUGUI instructions;
 
-    void Start() {
-        wonGO.SetActive(false);
-        loseGO.SetActive(false);
-    }
+    enum CoordinatorStates { Idle, WaitingForGame, PlayingGame }
+    CoordinatorStates _currentState;
+    float _stateChangedTime;
 
-    void Update() {
-        if (_currentMinigame != null && !_minigameDone) {
-            // Update time
-            var timeLeft = _currentMinigame.TimeLeft01();
-            timeLeftSlider.value = timeLeft;
-            
-            // Check if won
-            if (_currentMinigame.HasWon) {
-                wonGO.SetActive(true);
-                _minigameDone = true;
-            }
+    [Header("Transitions")]
+    public GameObject[] transitions;
 
-            // Check if lose
-            if (timeLeft <= 0 || !_currentMinigame.IsPlaying) {
-                Debug.Log($"Did you won? {_currentMinigame.HasWon}");
 
-                // Check if won
-                if (_currentMinigame.HasWon) {
-                    wonGO.SetActive(true);
-                } else {
-                    loseGO.SetActive(true);
-                }
-
-                _minigameDone = true;
-            }
+    CoordinatorStates CurrentState
+    {
+        get { return _currentState; }
+        set
+        {
+            _stateChangedTime = Time.time;
+            _currentState = value;
         }
     }
 
-    public void StartMinigame() {
+    void Start()
+    {
+        ResetUI();
+        CurrentState = CoordinatorStates.Idle;
+    }
+
+    void Update()
+    {
+        switch (CurrentState)
+        {
+            case CoordinatorStates.Idle: IdleUpdate(); break;
+            case CoordinatorStates.WaitingForGame: WaitingForGameUpdate(); break;
+            case CoordinatorStates.PlayingGame: PlayingGameUpdate(); break;
+        }
+    }
+
+    void IdleUpdate()
+    {
+        if (Time.time - _stateChangedTime >= 2f)
+        {
+            ResetUI();
+
+            StartCoroutine(StartMinigameWithAnimation());
+            CurrentState = CoordinatorStates.WaitingForGame;
+        }
+    }
+
+    void WaitingForGameUpdate()
+    {
+
+    }
+
+    void PlayingGameUpdate()
+    {
+        // Update time
+        bool timeDone = false;
+        if (_currentMinigame.UseTime)
+        {
+            var timeLeft = _currentMinigame.TimeLeft01();
+            timeLeftSlider.value = timeLeft;
+            timeDone = timeLeft <= 0;
+        }
+
+        // Check if won
+        if (_currentMinigame.HasWon)
+        {
+            wonGO.SetActive(true);
+            CurrentState = CoordinatorStates.Idle;
+        }
+
+        // Check if lose
+        if (!_currentMinigame.IsPlaying || timeDone)
+        {
+            Debug.Log($"Did you won? {_currentMinigame.HasWon}");
+
+            // Call the callback
+            if (timeDone)
+            {
+                _currentMinigame.TimeEnded();
+            }
+
+            // Check if won
+            if (_currentMinigame.HasWon)
+            {
+                wonGO.SetActive(true);
+            }
+            else
+            {
+                loseGO.SetActive(true);
+            }
+
+            CurrentState = CoordinatorStates.Idle;
+        }
+    }
+
+    IEnumerator StartMinigameWithAnimation()
+    {
+        // Play transition
+        if (transitions.Length > 0)
+        {
+            var transition = transitions.RandomPick();
+            transition.SetActive(true);
+        }
+        yield return _waitForSeconds1;
+
+        ChooseMinigame();
+        if (instructions)
+        {
+            instructions.gameObject.SetActive(true);
+            instructions.text = _currentMinigame.instructions != "" ? _currentMinigame.instructions : "Preparate!";
+            yield return _waitForSeconds1;
+            instructions.text = "";
+        }
+        StartChoosenMinigame();
+    }
+
+    void ChooseMinigame()
+    {
         // Get random game
-        var minigame = minigames[Random.Range(0, minigames.Length)];
+        var minigame = minigames.RandomPick(_currentMinigame);
 
         // If is not in the scene, instanciate it
-        if (_currentMinigameType != minigame || !_currentMinigame.IsInstanced) {
-            if (_currentMinigame != null) {
+        if (_currentMinigameType != minigame || !_currentMinigame.IsInstanced)
+        {
+            if (_currentMinigame != null)
+            {
                 Destroy(_currentMinigame.gameObject);
             }
             _currentMinigameType = minigame;
             _currentMinigame = Instantiate(minigame);
         }
+    }
 
+    void StartChoosenMinigame()
+    {
         // Start a new minigame
         _currentMinigame.StartGame();
-        _minigameDone = false;
+        CurrentState = CoordinatorStates.PlayingGame;
+        ResetUI();
+    }
+
+    // Didn't change for compatibility with current testing
+    public void StartMinigame()
+    {
+        ChooseMinigame();
+        StartChoosenMinigame();
+    }
+
+    void ResetUI()
+    {
         wonGO.SetActive(false);
         loseGO.SetActive(false);
     }

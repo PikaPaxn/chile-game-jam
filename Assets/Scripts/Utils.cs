@@ -63,6 +63,46 @@ public static class RandomUtil {
         }
         return (array[idx], idx);
     }
+
+    /// <summary>
+    /// Get a Random element of an array without repetition
+    /// </summary>
+    /// <typeparam name="T">Element Type</typeparam>
+    /// <param name="array">Array with elements</param>
+    /// <param name="last">Last element picked</param>
+    /// <returns>A random element of the array with no repetition</returns>
+    public static T RandomPick<T>(this T[] array, T last) {
+        if (array.Length < 2) {
+            Debug.LogWarning("Array is size 1, can't pick a different element");
+            return array[0];
+        }
+
+        if (last == null) {
+            return array.RandomPick();
+        }
+
+        T current = last;
+        while (current.Equals(last)) {
+            current = array.RandomPick();
+        }
+        return current;
+    }
+    public static T RandomPick<T>(this List<T> array, T last) {
+        if (array.Count < 2) {
+            Debug.LogWarning("Array is size 1, can't pick a different element");
+            return array[0];
+        }
+
+        if (last == null) {
+            return array.RandomPick();
+        }
+
+        T current = last;
+        while (current.Equals(last)) {
+            current = array.RandomPick();
+        }
+        return current;
+    }
     /// <summary>
     /// Gets a Random element of an array without repetition
     /// </summary>

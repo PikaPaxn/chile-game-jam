@@ -3,12 +3,12 @@ using UnityEngine.EventSystems;
 
 public class VegaItem : DragAndDrop
 {
-    Sprite _myIcon;
+    VegaSprites _myIcon;
     ItemCallbacks _callbacks;
 
-    public void Initialize(Sprite icon, ItemCallbacks callbacks = null) {
+    public void Initialize(VegaSprites icon, ItemCallbacks callbacks = null) {
         _myIcon = icon;
-        GetComponent<SpriteRenderer>().sprite = icon;
+        GetComponent<SpriteRenderer>().sprite = icon.fruit;
         _callbacks = callbacks;
 
         if (GetComponent<BoxCollider2D>() != null)
