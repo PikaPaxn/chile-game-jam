@@ -16,7 +16,7 @@ public class MinigamesCoordinator : MonoBehaviour
     public Slider timeLeftSlider;
     public GameObject wonGO;
     public GameObject loseGO;
-    public TextMeshProUGUI counterText;
+    public TextMeshProUGUI instructions;
 
     enum CoordinatorStates { Idle, WaitingForGame, PlayingGame }
     CoordinatorStates _currentState;
@@ -119,18 +119,17 @@ public class MinigamesCoordinator : MonoBehaviour
             var transition = transitions.RandomPick();
             transition.SetActive(true);
         }
-        yield return new WaitForSeconds(1f);
+        yield return _waitForSeconds1;
 
         ChooseMinigame();
-        if (counterText)
+        if (instructions)
         {
-            counterText.gameObject.SetActive(true);
-            counterText.text = _currentMinigame.instructions;
-            yield return new WaitForSeconds(1f);
-            counterText.text = "";
+            instructions.gameObject.SetActive(true);
+            instructions.text = _currentMinigame.instructions != "" ? _currentMinigame.instructions : "Preparate!";
+            yield return _waitForSeconds1;
+            instructions.text = "";
         }
         StartChoosenMinigame();
-        CurrentState = CoordinatorStates.PlayingGame;
     }
 
     void ChooseMinigame()
@@ -154,6 +153,7 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         // Start a new minigame
         _currentMinigame.StartGame();
+        CurrentState = CoordinatorStates.PlayingGame;
         ResetUI();
     }
 
@@ -168,9 +168,5 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         wonGO.SetActive(false);
         loseGO.SetActive(false);
-        if (counterText)
-        {
-            // counterText.text = "";
-        }
     }
 }
