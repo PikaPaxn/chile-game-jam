@@ -730,6 +730,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: -1
+  instructions: "\xA1Lanza!"
+  shouldWinOnTimeEnd: 1
   forceSlider: {fileID: 8212523443507816556}
   arena: {fileID: 1679594462532930729}
   arenaTarget: {fileID: 8728427669528160281}

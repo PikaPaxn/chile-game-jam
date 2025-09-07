@@ -137,7 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: 3
-  instructions: 
+  instructions: Llega a la meta!
+  shouldWinOnTimeEnd: 1
   maxErrors: 3
   player: {fileID: 636757290768364839}
   jumpForce: 220
