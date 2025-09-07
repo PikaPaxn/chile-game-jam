@@ -10,13 +10,13 @@ public class PauseGame : MonoBehaviour {
 
     GameObject _oldSelectable;
     float _oldTimeScale = 1f;
-    InputAction pauseAction;
+    MinigamesCoordinator _coordinator;
     
-
     void Start() {
         UnPause();
-        pauseAction = InputSystem.actions.FindAction("Pause");
+        var pauseAction = InputSystem.actions.FindAction("Pause");
         pauseAction.started += GamepadPause;
+        _coordinator = FindFirstObjectByType<MinigamesCoordinator>();
     }
 
     void GamepadPause(InputAction.CallbackContext ctx) {
@@ -24,6 +24,8 @@ public class PauseGame : MonoBehaviour {
     }
 
     public void Pause() {
+        if (_coordinator) _coordinator.PauseMinigame(true);
+
         pauseButton.SetActive(false);
         pausePanel.SetActive(true);
         _oldSelectable = EventSystem.current.currentSelectedGameObject;
@@ -37,6 +39,7 @@ public class PauseGame : MonoBehaviour {
         pausePanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(_oldSelectable);
         Time.timeScale = _oldTimeScale;
+        if (_coordinator) _coordinator.PauseMinigame(false);
     }
 
     bool IsPaused => Time.timeScale == 0;

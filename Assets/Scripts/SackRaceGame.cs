@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 enum SackGameState
 {
@@ -26,14 +27,16 @@ public class SackRaceGame : MinigameController
     [Header("Canvas")]
     [SerializeField] private GameObject leftButton;
     [SerializeField] private GameObject rightButton;
+    private InputAction input;
+
 
     private bool waitingForLeft = true;
     private SackGameState playerState = SackGameState.WaitingForInput;
 
-    private void Start()
-    {
+    private void Start() {
         leftButton.SetActive(true);
         rightButton.SetActive(false);
+        input = InputSystem.actions.FindAction("Saco");
     }
 
     public override void StartGame()
@@ -117,8 +120,8 @@ public class SackRaceGame : MinigameController
 
     private bool IsCorrectKeyPressed()
     {
-        return (waitingForLeft && Input.GetButtonDown("DirectionLeft")) ||
-               (!waitingForLeft && Input.GetButtonDown("DirectionRight"));
+        return (waitingForLeft && input.GetAxisDown() < 0) ||
+               (!waitingForLeft && input.GetAxisDown() > 0);
     }
 
     private void RegisterError()

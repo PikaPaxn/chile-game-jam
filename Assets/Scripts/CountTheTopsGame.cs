@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class CountTheTopsGame : MinigameController
 {
@@ -34,6 +35,7 @@ public class CountTheTopsGame : MinigameController
     [Header("Inputs")]
     [SerializeField] private bool allowSpace = true;
     [SerializeField] private bool allowFire1 = true;
+    private InputAction input;
 
     [Header("Eventos")]
     public UnityEvent onWin;
@@ -44,6 +46,10 @@ public class CountTheTopsGame : MinigameController
     [SerializeField] private int actualCount;
 
     private Coroutine _spawnLoop;
+
+    private void Start() {
+        input = InputSystem.actions.FindAction("AnyButton");
+    }
 
     public override void StartGame()
     {
@@ -72,15 +78,17 @@ public class CountTheTopsGame : MinigameController
     private void HandleInputs()
     {
         // Evita doble conteo si se hace clic sobre UI: el botón UI llamará a OnPressCount() aparte
-        // bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
-        bool pressed = false;
-        if (!pressed && allowSpace && Input.GetKeyDown(KeyCode.Space))
-            pressed = true;
+        //bool pressed = false;
+        //if (!pressed && allowSpace && Input.GetKeyDown(KeyCode.Space))
+        //    pressed = true;
 
-        // if (!pressed && allowFire1 && !overUI && Input.GetButtonDown("Fire1"))
-        if (!pressed && allowFire1 && Input.GetButtonDown("Fire1"))
-            pressed = true;
+        //// if (!pressed && allowFire1 && !overUI && Input.GetButtonDown("Fire1"))
+        //if (!pressed && allowFire1 && Input.GetButtonDown("Fire1"))
+        //    pressed = true;
+
+        bool pressed = input.GetButtonDown() && !overUI;
 
         if (pressed)
             IncrementPlayerCount();
@@ -149,6 +157,9 @@ public class CountTheTopsGame : MinigameController
 
             actualCount++;
             
+            if (IsPaused) {
+                yield return new WaitWhile(() => { return IsPaused; });
+            }
         }
     }
 
