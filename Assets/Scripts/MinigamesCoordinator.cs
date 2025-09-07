@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MinigamesCoordinator : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class MinigamesCoordinator : MonoBehaviour
     public GameObject wonGO;
     public GameObject loseGO;
     public TextMeshProUGUI instructions;
+    public GameObject gameOverUI;
+    public GameObject kites;
 
     enum CoordinatorStates { Idle, WaitingForGame, PlayingGame }
     CoordinatorStates _currentState;
@@ -26,11 +29,12 @@ public class MinigamesCoordinator : MonoBehaviour
 
     [Header("Transitions")]
     public GameObject[] transitions;
-    public GameObject kites;
     public int lives = 3;
     private bool _gameOverShown = false;
-    public GameObject gameOverUI;
+    public String[] loseTexts = { "Has perdido!", "Inténtalo de nuevo!", "Casi lo logras!" };
 
+    [Header("Camera")]
+    public CameraController cameraController;
 
     CoordinatorStates CurrentState
     {
@@ -42,11 +46,15 @@ public class MinigamesCoordinator : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        _timeSliderAnimator = timeLeftSlider.GetComponent<Animator>();
+    }
+
     void Start()
     {
         ResetUI();
         CurrentState = CoordinatorStates.Idle;
-        _timeSliderAnimator = timeLeftSlider.GetComponent<Animator>();
     }
 
     void Update()
@@ -56,6 +64,19 @@ public class MinigamesCoordinator : MonoBehaviour
             case CoordinatorStates.Idle: IdleUpdate(); break;
             case CoordinatorStates.WaitingForGame: WaitingForGameUpdate(); break;
             case CoordinatorStates.PlayingGame: PlayingGameUpdate(); break;
+        }
+    }
+
+    void PlayTransition()
+    {
+        if (transitions.Length > 0)
+        {
+            var transition = transitions.RandomPick();
+            transition.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("No transitions assigned in MinigamesCoordinator");
         }
     }
 
@@ -133,6 +154,7 @@ public class MinigamesCoordinator : MonoBehaviour
             else
             {
                 loseGO.SetActive(true);
+                loseGO.GetComponent<TextMeshProUGUI>().text = loseTexts.RandomPick();
                 lives--;
                 if (lives <= 0)
                 {
@@ -148,12 +170,7 @@ public class MinigamesCoordinator : MonoBehaviour
 
     IEnumerator StartMinigameWithAnimation()
     {
-        // Play transition
-        if (transitions.Length > 0)
-        {
-            var transition = transitions.RandomPick();
-            transition.SetActive(true);
-        }
+        PlayTransition();
 
         // Play kites lives animation
         if (kites != null)
@@ -194,6 +211,7 @@ public class MinigamesCoordinator : MonoBehaviour
 
         ChooseMinigame();
         StartChoosenMinigame();
+        cameraController.ZoomIn();
         if (instructions)
         {
             instructions.gameObject.SetActive(true);
