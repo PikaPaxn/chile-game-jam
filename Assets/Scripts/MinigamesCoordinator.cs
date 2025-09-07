@@ -98,15 +98,12 @@ public class MinigamesCoordinator : MonoBehaviour
             counterText.text = "1";
             yield return new WaitForSeconds(1f);
             counterText.text = _currentMinigame.instructions;
+            yield return new WaitForSeconds(1f);
+            counterText.text = "";
         }
 
         StartChoosenMinigame();
         CurrentState = CoordinatorStates.PlayingGame;
-
-        if (counterText) {
-            yield return new WaitForSeconds(1f);
-            counterText.text = "";
-        }
     }
 
     void ChooseMinigame() {

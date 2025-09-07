@@ -15,7 +15,7 @@ public class PauseGame : MonoBehaviour {
 
     void Start() {
         UnPause();
-        pauseAction = InputSystem.actions.FindAction("AnyButton");
+        pauseAction = InputSystem.actions.FindAction("Pause");
         pauseAction.started += GamepadPause;
     }
 
