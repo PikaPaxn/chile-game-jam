@@ -1251,8 +1251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeLimit: 4
   instructions: "\xA1Haz florecer el desierto!"
-  shouldWinOnTimeEnd: 1
-  targetClicks: 15
+  shouldWinOnTimeEnd: 0
+  targetClicks: 25
   counterText: {fileID: 5457225211395901583}
   timerText: {fileID: 0}
   rainParticles: {fileID: 5901519321493151917}
