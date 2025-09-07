@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minigames:
-  - {fileID: 329450140561777813, guid: 622b6cbc0179e634db574c27a7dc0452, type: 3}
+  - {fileID: 5328390441111784903, guid: 39f0551e22fc4a84a86cea2fcea51e88, type: 3}
   timeLeftSlider: {fileID: 246923806}
   wonGO: {fileID: 75424972}
   loseGO: {fileID: 864402264}
@@ -1162,6 +1162,7 @@ GameObject:
   - component: {fileID: 1274748810}
   - component: {fileID: 1274748809}
   - component: {fileID: 1274748808}
+  - component: {fileID: 1274748811}
   m_Layer: 5
   m_Name: StartMinigame
   m_TagString: Untagged
@@ -1283,6 +1284,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274748806}
   m_CullTransparentMesh: 1
+--- !u!95 &1274748811
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274748806}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fe4cd142a89c07047a9fbbbd336d169d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1411295750
 GameObject:
   m_ObjectHideFlags: 0
