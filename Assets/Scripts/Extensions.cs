@@ -18,4 +18,9 @@ public static class InputActionButtonExtensions {
             return action.ReadValue<Vector2>();
         return Vector2.zero;
     }
+    public static float GetAxisDown(this InputAction action) {
+        if (action.triggered)
+            return action.ReadValue<float>();
+        return 0f;
+    }
 }

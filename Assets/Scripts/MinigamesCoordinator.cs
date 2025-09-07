@@ -72,6 +72,9 @@ public class MinigamesCoordinator : MonoBehaviour
 
     void PlayingGameUpdate()
     {
+        if (_currentMinigame.IsPaused)
+            return;
+
         // Update time
         bool timeDone = false;
         if (_currentMinigame.UseTime)
@@ -142,7 +145,7 @@ public class MinigamesCoordinator : MonoBehaviour
     void ChooseMinigame()
     {
         // Get random game
-        var minigame = minigames.RandomPick(_currentMinigame);
+        var minigame = minigames.RandomPick(_currentMinigameType);
 
         // If is not in the scene, instanciate it
         if (_currentMinigameType != minigame || !_currentMinigame.IsInstanced)
@@ -178,5 +181,9 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         wonGO.SetActive(false);
         loseGO.SetActive(false);
+    }
+
+    internal void PauseMinigame(bool pause) {
+        _currentMinigame.Pausing(pause);
     }
 }
