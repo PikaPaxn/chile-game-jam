@@ -122,6 +122,7 @@ public class MinigamesCoordinator : MonoBehaviour
         yield return _waitForSeconds1;
 
         ChooseMinigame();
+        StartChoosenMinigame();
         if (instructions)
         {
             instructions.gameObject.SetActive(true);
@@ -129,7 +130,11 @@ public class MinigamesCoordinator : MonoBehaviour
             yield return _waitForSeconds1;
             instructions.text = "";
         }
-        StartChoosenMinigame();
+        else
+        {
+            Debug.LogWarning("No instructions text assigned in MinigamesCoordinator");
+        }
+
     }
 
     void ChooseMinigame()
