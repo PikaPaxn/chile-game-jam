@@ -609,6 +609,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLimit: 12
+  instructions: "\xA1Ordena!"
+  shouldWinOnTimeEnd: 0
   boxes:
   - {fileID: 7938384262086651607}
   - {fileID: 1461977943838892551}
