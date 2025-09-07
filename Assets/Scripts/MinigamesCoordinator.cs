@@ -14,6 +14,7 @@ public class MinigamesCoordinator : MonoBehaviour
 
     [Header("UI Refs")]
     public Slider timeLeftSlider;
+    Animator _timeSliderAnimator;
     public GameObject wonGO;
     public GameObject loseGO;
     public TextMeshProUGUI instructions;
@@ -40,6 +41,7 @@ public class MinigamesCoordinator : MonoBehaviour
     {
         ResetUI();
         CurrentState = CoordinatorStates.Idle;
+        _timeSliderAnimator = timeLeftSlider.GetComponent<Animator>();
     }
 
     void Update()
@@ -160,6 +162,9 @@ public class MinigamesCoordinator : MonoBehaviour
         _currentMinigame.StartGame();
         CurrentState = CoordinatorStates.PlayingGame;
         ResetUI();
+        if (_timeSliderAnimator) {
+            _timeSliderAnimator.SetBool("UsesTime", _currentMinigame.UseTime);
+        }
     }
 
     // Didn't change for compatibility with current testing
