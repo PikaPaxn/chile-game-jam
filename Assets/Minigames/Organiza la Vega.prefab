@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f7b92e83b3a934d960259fc4f0a663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: 12
+  timeLimit: 7
   instructions: "\xA1Ordena!"
   shouldWinOnTimeEnd: 0
   boxes:

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430da645519922f4e8391c2567b838ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLimit: 7
+  timeLimit: 6
   instructions: "\xA1Clickea la Regi\xF3n!"
   shouldWinOnTimeEnd: 0
   questionText: {fileID: 4640957410189753156}
