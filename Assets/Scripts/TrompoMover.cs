@@ -26,7 +26,7 @@ public class TrompoMover : MonoBehaviour
         transform.position += Vector3.left * Speed * Time.deltaTime;
 
         // Spin
-        transform.Rotate(spinEulerPerSecond * Time.deltaTime, Space.Self);
+        // transform.Rotate(spinEulerPerSecond * Time.deltaTime, Space.Self);
 
         // Mantener z fija (útil en perspectiva para que no se acerque/aleje)
         if (UseWorldDepthLock)
