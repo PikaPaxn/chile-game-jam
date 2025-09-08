@@ -42,9 +42,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3821736225905176273}
   - component: {fileID: 2670632712860468527}
-  - component: {fileID: 4042712180450728812}
+  - component: {fileID: 8434945643657823403}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Trompo Imagen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +120,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &4042712180450728812
+--- !u!95 &8434945643657823403
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -130,7 +130,7 @@ Animator:
   m_GameObject: {fileID: 7973249131585888346}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b0f751364fbeae24e8be0f165f8d5e67, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5018b08ee28659d47911aad594d349df, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
